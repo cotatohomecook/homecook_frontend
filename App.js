@@ -13,8 +13,8 @@ export default function App() {
      
       <NavigationContainer>
         <Stack.Navigator>
-          <Stack.Screen name="CostomerStartScreen" component={CostomerStartScreen} />
-          <Stack.Screen name="CostomerMap" component ={CostomerMap}/>
+          <Stack.Screen name="CostomerStartScreen" component={CostomerStartScreen} options={{headerShown: false}} />
+          <Stack.Screen name="CostomerMap" component ={CostomerMap} options={{headerShown: false}}/>
         </Stack.Navigator>
       </NavigationContainer>
     
