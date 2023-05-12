@@ -1,7 +1,10 @@
 import { View, Text, StyleSheet, Image, FlatList, Pressable, ScrollView, TouchableOpacity} from 'react-native';
 //import Button from '../components/Button';
-import React, {useState} from 'react';
-import { CARDS } from '../data/dummy-data';
+import React, {useState, useEffect} from 'react';
+import CostomerStoreRanks from '../data/CostomerStoreRank';
+import CostomerStoreSlide from '../data/CostomerStoreSlide';
+import CostomerStoreCategory from '../data/CostomerStoreCategory';
+
 
 // 음식 슬라이드 더미 데이터 받아오는 코드
 const renderGridItem = (itemData) => {
@@ -26,39 +29,18 @@ const renderButtonItem = (itemData) => {
 
 // 카테고리 버튼 
 
-function CostomerStartScreen({navigation}){
+function CostomerStartScreen({navigation, route}){
+ 
 
-
-//순위 슬라이드 더미 데이터 받아오는 코드
-const [MENU, setMENU] =  useState([
-  {title: '케이크 홀릭', love: 20},
-  {title: '성수샌드위치', love: 30}, 
-  {title:'순이네 집밥', love: 40}, 
-
-  ]);
-  
-  //love(좋아요) 갯수를 기준으로 순위 매기는 알고리즘
-  const displaymenu = MENU.sort(function(a,b){
-    return b.love - a.love;
-  })  
-  var rank = 1;
-  for (var i = 0; i < MENU.length; i++) {
-
-  if (i > 0 && MENU[i].love< MENU[i - 1].love) {
-    rank++;
-  }
-    MENU[i].rank = rank;
-  }
 
   //화면 출력 
   return(
     <>
-
     <View style={styles.imageContainer}>
     <Text style = {styles.title}>지금 내 지역은?</Text> 
 
     <View style = {[styles.position, styles.color]}>
-    <Image source={{uri : "https://velog.velcdn.com/images/kkaerrung/post/3e76ff47-3626-471e-9034-1aef778633b0/image.png", "width":14.18,"height":13,}}/>
+    <Image source={{uri : "https://velog.velcdn.com/images/kkaerrung/post/efcd26f6-62fd-4a75-9437-0453832e0472/image.png", "width":14.18,"height":13,}}/>
     </View>
 
     <View style = {styles.ractangle}>
@@ -75,33 +57,18 @@ const [MENU, setMENU] =  useState([
     <Text style = {[styles.text]}>지금까지 누적 랭킹입니다.</Text>
     
     <View style = {styles.textdesign}>
-    <FlatList 
-    data = {MENU}
-    keyExtractor = {(item) => item.title}
-    renderItem={({item}) => (
-      <Text>{item.rank}등&nbsp;{item.title}</Text>
-    )}
-    />
+    <CostomerStoreRanks/>
     </View>
    <Text style = {styles.how}> 오늘은 어떤</Text>
    <Text style = {styles.food}>음식 </Text>
    <Text style = {styles.want}>이 땡기세요?</Text>
 
-<View style = {styles.box}>
-
-</View>
-<View style = {styles.all}>
-<ScrollView horizontal = {true}>
-   <FlatList keyExtracter={(item) => item.title} 
-          data={CARDS} 
-          renderItem={renderGridItem}
-          numColumns={CARDS.length}   
-/>
-</ScrollView>  
+<View style = {styles.storeslide}>
+<CostomerStoreSlide/>
 </View> 
-
-
-
+<View style = {styles.categoryslide}>
+<CostomerStoreCategory/>
+</View>
 </>
 
     );
@@ -144,7 +111,6 @@ color : {
   height: 12,
   left: 220.5,
   top: 95,
-  background: "#72FFAA"
 },
 
 title: {
@@ -168,8 +134,10 @@ inputContainer: {
     width: 69,
     height: 27,
     borderRadius: 9,
+    top: -5,
     backgroundColor: "#ffffff",
-    zIndex: 0  
+    zIndex: 0,
+    elevation: 5,
 },
 invalidName:{
   width: 34,
@@ -203,9 +171,7 @@ text :{
   height: 17,
   left: 49,
   top: 159,
-
-  //font-family: 'Noto Sans KR';
-  //font-style: normal;
+  fontStyle: 'normal',
   fontWeight: 500,
   fontSize: 12,
   lineHeight: 17,
@@ -219,6 +185,7 @@ textdesign: {
   height: 17,
   left: 263,
   top: 160,
+  zIndex: 5,
 
   //font-family: 'Noto Sans KR';
   //font-style: normal,
@@ -262,7 +229,7 @@ want: {
   position: "absolute",
   width: 130,
   height: 29,
-  left: 229,
+  left: 220,
   top: 210,
 
   //fontFamily: 'Noto Sans KR';
@@ -348,11 +315,11 @@ textAlign: 'center',
 color: '#FFFFFF'
 },
 
-all: {
+storeslide: {
   flex: 1,
   width:"100%",
-  top: 50,
-  Height: 38
+  top: 170,
+  Height: 50
  
 },
 Meals: {
@@ -387,5 +354,12 @@ ractangle:{
   top: 91,
   zIndex: 0
 
+},
+name : {
+  color: '#000000',
+},
+categoryslide: {
+  top: 100,
+  height: 400
 }
 });
