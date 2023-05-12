@@ -145,7 +145,7 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     zIndex: 5,
     top: 10,
-  
+  ///////
   },
   button: {
     flex: 1,

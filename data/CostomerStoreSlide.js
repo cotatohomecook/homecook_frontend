@@ -135,6 +135,8 @@ const styles = StyleSheet.create({
   },
   image: {
     top: -20
+    //////
+    /////
 
   }
 });
