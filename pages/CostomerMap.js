@@ -1,54 +1,65 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { StyleSheet } from 'react-native';
 import MapView, { Marker } from 'react-native-maps';
+import axios from 'axios';
 
-function Map({navigation}) {
-  const [selectedLocation, setSelectedLocation] = useState();
+function Map({ navigation }) {
+  const [shops, setShops] = useState([]);
+
+  useEffect(() => {
+    const fetchShops = async () => {
+      try {
+        const response = await axios.get(
+          'http://3.38.33.21:8080/api/shops/rank?latitude=37.602643&longitude=126.924805'
+        );
+        setShops(response.data);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    fetchShops();
+  }, []);
 
   const region = {
-    latitude: 37.78,
-    longitude: -122.43,
+    latitude: 37.602643,
+    longitude: 126.924805,
     latitudeDelta: 0.0922,
     longitudeDelta: 0.0421,
   };
-
-  function selectLocationHandler(event) {
-    const lat = event.nativeEvent.coordinate.latitude;
-    const lng = event.nativeEvent.coordinate.longitude;
-
-    setSelectedLocation({ lat: lat, lng: lng });
-  }
-  function savePickedLocationHandler(){
-    if(!selectedLocation){
-        Alert.alert('지도를 터치해서, 위치를 먼저 선택해야 합니다')
-    }
-    return;
-  }
-  navigation.goBack();
 
   return (
     <MapView
       style={styles.map}
       initialRegion={region}
-      onPress={selectLocationHandler}
     >
-      {selectedLocation && (
-        <Marker
-          title="Picked Location"
-          coordinate={{
-            latitude: selectedLocation.lat,
-            longitude: selectedLocation.lng,
-          }}
-        />
-      )}
+      {/* Add markers for shops */}
+      <Marker
+        title="Current Location"
+        coordinate={{
+          latitude: region.latitude,
+          longitude: region.longitude,
+        }}
+      />
+      {shops.length > 0 &&
+        shops.map((shop) => (
+          <Marker
+            key={shop.shopId}
+            title={shop.shopName}
+            coordinate={{
+              latitude: region.latitude,
+              longitude: region.longitude,
+            }}
+          />
+        ))}
     </MapView>
   );
 }
-
-export default Map;
 
 const styles = StyleSheet.create({
   map: {
     flex: 1,
   },
 });
+
+export default Map;

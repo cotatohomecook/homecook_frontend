@@ -17,6 +17,7 @@ function LocationPicker() {
   const navigation = useNavigation();
   const [locationPermissionInformation, requestPermission] = useForegroundPermissions();
 
+  /* 사용자 위치 받아오는데, 권한 요청하는 코드*/
   async function verifyPermissions() {
     if (
       locationPermissionInformation.status === PermissionStatus.UNDETERMINED
@@ -37,6 +38,7 @@ function LocationPicker() {
     return true;
   }
 
+/* 권한이 없으면 돌아가는 코드 */
   async function getLocationHandler() {
     const hasPermission = await verifyPermissions();
 
