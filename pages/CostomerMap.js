@@ -34,7 +34,31 @@ function CostomerMap({ navigation }) {
   };
 
  
-  const circleRadius = 3000; // 3km
+  const circleRadius = 1500; // 3km
+
+  //가게 마커 스타일링
+  const renderMarkerIcon = (shop) => {
+
+    return (
+    
+      <View style={styles.markerContainer}>
+        <Text style={styles.markerText}>{shop.rating}</Text>
+      </View>
+    );
+  };
+
+  //현재 위치 마커 스타일링
+  const currentMarkerIcon = () => {
+
+    return (
+      <>
+      <View style={styles.currentmarkerContainer}>
+        <View style = {styles.currentmarkerInner}></View>
+      </View>
+
+      </>
+    );
+  };
 
   return (
     <View style={styles.container}>
@@ -46,23 +70,22 @@ function CostomerMap({ navigation }) {
             latitude: region.latitude,
             longitude: region.longitude,
           }}
-        />
+          >
+          {currentMarkerIcon()}
+        </Marker>
+      
 
-        {/* Add markers for shops */}
         {shops.map((shop) => (
           <Marker
             key={shop.shopId}
-            title = {shop.shopName}
+            title={shop.shopName}
             coordinate={{
-            latitude: shop.latitude,
-            longitude: shop.longitude,
+              latitude: shop.latitude,
+              longitude: shop.longitude,
             }}
-            icon={() => (
-              <View style={styles.shopsmarker}>
-                <Text>평점: {shop.rating}</Text>
-              </View>
-            )}
-          />
+          >
+          {renderMarkerIcon(shop)}
+          </Marker>
         ))}
 
         {/* Add circle for 3km radius */}
@@ -76,9 +99,10 @@ function CostomerMap({ navigation }) {
           fillColor="rgba(158, 158, 255, 0.2)"
         />
       </MapView>
+
       <View style={styles.carouselContainer}>
-  { shops.length > 0 && (
-    <Carousel
+    {shops.length > 0 && (
+      <Carousel
       data={shops}
       renderItem={({ item }) => (
         <View style={styles.slide}>
@@ -86,13 +110,12 @@ function CostomerMap({ navigation }) {
           <Text style={styles.shopName}>{item.shopName}</Text>
           <Text style={styles.shopId}>{item.shopId}</Text>
 
-        
-    <View style={styles.starsContainer}>
-      {Array.from({ length: 5 }, (_, index) => {
-        if (index < Math.floor(item.reviewCount)) {
-          return <Text key={index} style={[styles.starIcon, styles.yellowStar]}>★</Text>;
-        } else {
-          return <Text key={index} style={[styles.starIcon, styles.grayStar]}>★</Text>;
+          <View style={styles.starsContainer}>
+          {Array.from({ length: 5 }, (_, index) => {
+          if (index < Math.floor(item.rating)) {
+            return <Text key={index} style={[styles.starIcon, styles.yellowStar]}>★</Text>;
+          } else {
+            return <Text key={index} style={[styles.starIcon, styles.grayStar]}>★</Text>;
         }
       })}
     </View>
@@ -168,5 +191,45 @@ const styles = StyleSheet.create({
   grayStar: {
     color: '#D3D3D3',
   },
+  shopsmarker: {
+    height: 50,
+    width: 100,
+    borderRadius: 8,
+    backgroundColor: 'gray',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  shopRating: {
+    color: 'white',
+    fontSize: 14,
+    fontWeight: 'bold',
+  },
+  markerContainer: {
+    width: 34,
+    height: 24,
+    borderRadius: 12,
+    backgroundColor: "#a8a8a8"
+  },
+  markerText:{
+    textAlign: 'center'
+  },
+  currentmarkerContainer:{ 
+    width: 46,
+    height: 46,
+    backgroundColor: "#F05650",
+    borderRadius: 50,
+    zIndex: 1,
+  },
+  currentmarkerInner:{
+  width: 16,
+  height: 16,
+  borderRadius: 50,
+  backgroundColor:'#FFFFFF',
+  zIndex: 3,
+  left: 14,
+  top: 14,
+  
+ 
+  }
 })
 export default CostomerMap;
