@@ -61,6 +61,8 @@ function CostomerMap({ navigation }) {
   };
 
   return (
+    <>
+    <View stlye = {styles.header}></View>
     <View style={styles.container}>
       <MapView style={styles.map} initialRegion={region}>
         {/* Add markers for current location */}
@@ -129,10 +131,17 @@ function CostomerMap({ navigation }) {
 </View>
 
     </View>
+    </>
   );
 }
 
 const styles = StyleSheet.create({
+  header:{ 
+    width: 393,
+    height: 168,
+    backgroundColor: "#ffb15f",
+    zIndex: 10
+  },
   container: {
     flex: 1,
     justifyContent: 'center',
