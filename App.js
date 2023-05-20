@@ -14,7 +14,9 @@ export default function App() {
       <NavigationContainer>
         <Stack.Navigator>
           <Stack.Screen name="CostomerStartScreen" component={CostomerStartScreen} options={{headerShown: false}} />
-          <Stack.Screen name="CostomerMap" component ={CostomerMap} options={{headerShown: false}}/>
+          <Stack.Screen name="CostomerMap" component={CostomerMap} options={{headerTitle: '',  headerStyle: { backgroundColor: "#ffb15f"}, headerHeight: 20,
+  }}
+/>
         </Stack.Navigator>
       </NavigationContainer>
     
