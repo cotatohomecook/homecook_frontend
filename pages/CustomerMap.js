@@ -3,6 +3,7 @@ import { StyleSheet, View, Text, Dimensions, Image } from 'react-native';
 import MapView, { Marker, Circle } from 'react-native-maps';
 import Carousel from 'react-native-snap-carousel';
 import axios from 'axios';
+import StarRating from '../common/StarRating';
 
 const { width } = Dimensions.get('window');
 
@@ -34,7 +35,7 @@ function CustomerMap({ navigation }) {
   };
 
  
-  const circleRadius = 1500; // 3km
+  const circleRadius = 3000; // 3km
 
   //가게 마커 스타일링
   const renderMarkerIcon = (shop) => {
@@ -65,7 +66,7 @@ function CustomerMap({ navigation }) {
     <View stlye = {styles.header}></View>
     <View style={styles.container}>
       <MapView style={styles.map} initialRegion={region}>
-        {/* Add markers for current location */}
+        {/* 현재 위치 마커 표시 */}
         <Marker
           title="Current Location"
           coordinate={{
@@ -76,7 +77,7 @@ function CustomerMap({ navigation }) {
           {currentMarkerIcon()}
         </Marker>
       
-
+        {/* 상점 위치 마커 표시 */}
         {shops.map((shop) => (
           <Marker
             key={shop.shopId}
@@ -90,7 +91,7 @@ function CustomerMap({ navigation }) {
           </Marker>
         ))}
 
-        {/* Add circle for 3km radius */}
+        {/* 3키로 범위 원 추가  */}
         <Circle
           center={{
             latitude: region.latitude,
@@ -111,17 +112,11 @@ function CustomerMap({ navigation }) {
           <Image source ={{uri: item.imageUrl,"width":100, "height": 129}}/>
           <Text style={styles.shopName}>{item.shopName}</Text>
           <Text style={styles.shopId}>{item.shopId}</Text>
-
-          <View style={styles.starsContainer}>
-          {Array.from({ length: 5 }, (_, index) => {
-          if (index < item.rating) {
-            return <Text key={index} style={[styles.starIcon, styles.yellowStar]}>★</Text>;
-          } else {
-            return <Text key={index} style={[styles.starIcon, styles.grayStar]}>★</Text>;
-        }
-      })}
-    </View>
-  </View>
+          <Text style = {styles.shopReview}>Review:{item.reviewCount}</Text>
+          <View style={styles.shopStar}>
+            <StarRating rating={item.rating} width={108} height={19} /> 
+          </View>
+        </View>
       )}
       sliderWidth={width}
       itemWidth={252}
@@ -164,7 +159,6 @@ const styles = StyleSheet.create({
     backgroundColor: '#ffffff',
     marginBottom: 20,
     zIndex: 1,
-    
   },
   shopName: {
     fontSize: 18,
@@ -173,6 +167,24 @@ const styles = StyleSheet.create({
     left: 130,
     top: -110,
   },
+  shopReview:{
+    width: 92,
+    height: 14,
+    top: -140,
+    left: 110,
+    fontSize: 12,
+    fontWeight: "normal",
+    fontStyle: "normal",
+    letterSpacing: 0.7,
+    textAlign: "center",
+    color: "#77838f",
+  },
+  shopStar:{
+    left: 70,
+    top: -110,
+    width: 108,
+    height: 19,
+  },
   shopsmarker:{
     height: 24,
     width: 34,
@@ -180,25 +192,6 @@ const styles = StyleSheet.create({
     top: 0,
     borderRadius: 12,
     backgroundColor: '#A8A8A8'
-  },
-  starsContainer: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    marginTop: 10,
-    zIndex: 5,
-    top: -100,
-  },
-  starIcon: {
-    fontSize: 20,
-    marginRight: 2,
-    left: 40,
-    top: -20,
-  },
-  yellowStar: {
-    color: '#ff7f00',
-  },
-  grayStar: {
-    color: '#D3D3D3',
   },
   shopsmarker: {
     height: 50,
@@ -237,8 +230,7 @@ const styles = StyleSheet.create({
   zIndex: 3,
   left: 14,
   top: 14,
-  
- 
-  }
+  },
+
 })
 export default CustomerMap;
