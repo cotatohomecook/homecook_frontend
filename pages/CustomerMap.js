@@ -6,7 +6,7 @@ import axios from 'axios';
 
 const { width } = Dimensions.get('window');
 
-function CostomerMap({ navigation }) {
+function CustomerMap({ navigation }) {
   const [shops, setShops] = useState([]);
 
   useEffect(() => {
@@ -114,7 +114,7 @@ function CostomerMap({ navigation }) {
 
           <View style={styles.starsContainer}>
           {Array.from({ length: 5 }, (_, index) => {
-          if (index < Math.floor(item.rating)) {
+          if (index < item.rating) {
             return <Text key={index} style={[styles.starIcon, styles.yellowStar]}>★</Text>;
           } else {
             return <Text key={index} style={[styles.starIcon, styles.grayStar]}>★</Text>;
@@ -241,4 +241,4 @@ const styles = StyleSheet.create({
  
   }
 })
-export default CostomerMap;
+export default CustomerMap;

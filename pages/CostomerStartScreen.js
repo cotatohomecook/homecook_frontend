@@ -45,7 +45,7 @@ function CostomerStartScreen({navigation, route}){
 
     <View style = {styles.ractangle}>
     <Pressable style = {styles.inputContainer} 
-    onPress={()=> navigation.navigate('CostomerMap')}
+    onPress={()=> navigation.navigate('CustomerMap')}
     >
     <Text style={styles.invalidName}>성수동</Text>
     </Pressable>
