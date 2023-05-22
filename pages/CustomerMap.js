@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { StyleSheet, View, Text, Dimensions, Image } from 'react-native';
 import MapView, { Marker, Circle } from 'react-native-maps';
 import Carousel from 'react-native-snap-carousel';
@@ -7,8 +7,9 @@ import StarRating from '../common/StarRating';
 
 const { width } = Dimensions.get('window');
 
-function CustomerMap({ navigation }) {
+function CustomerMap() {
   const [shops, setShops] = useState([]);
+  const carouselRef = useRef(null);
 
   useEffect(() => {
     const fetchShops = async () => {
@@ -25,8 +26,6 @@ function CustomerMap({ navigation }) {
     fetchShops();
   }, []);
 
-  console.log(shops)
-
   const region = {
     latitude: 37.602643,
     longitude: 126.924805,
@@ -34,51 +33,42 @@ function CustomerMap({ navigation }) {
     longitudeDelta: 0.0421,
   };
 
- 
   const circleRadius = 3000; // 3km
 
-  //가게 마커 스타일링
   const renderMarkerIcon = (shop) => {
-
     return (
-    
       <View style={styles.markerContainer}>
         <Text style={styles.markerText}>{shop.rating}</Text>
       </View>
     );
   };
 
-  //현재 위치 마커 스타일링
   const currentMarkerIcon = () => {
-
     return (
-      <>
       <View style={styles.currentmarkerContainer}>
-        <View style = {styles.currentmarkerInner}></View>
+        <View style={styles.currentmarkerInner}></View>
       </View>
-
-      </>
     );
   };
 
+  const handleMarkerPress = (selectedShopId) => {
+      carouselRef.current.snapToItem(selectedShopId);
+  };
+
   return (
-    <>
-    <View stlye = {styles.header}></View>
     <View style={styles.container}>
       <MapView style={styles.map} initialRegion={region}>
-        {/* 현재 위치 마커 표시 */}
         <Marker
           title="Current Location"
           coordinate={{
             latitude: region.latitude,
             longitude: region.longitude,
           }}
-          >
+        >
           {currentMarkerIcon()}
         </Marker>
       
-        {/* 상점 위치 마커 표시 */}
-        {shops.map((shop) => (
+        {shops.map((shop, index) => (
           <Marker
             key={shop.shopId}
             title={shop.shopName}
@@ -86,12 +76,12 @@ function CustomerMap({ navigation }) {
               latitude: shop.latitude,
               longitude: shop.longitude,
             }}
+            onPress={() => handleMarkerPress(index)} 
           >
-          {renderMarkerIcon(shop)}
+            {renderMarkerIcon(shop)}
           </Marker>
         ))}
 
-        {/* 3키로 범위 원 추가  */}
         <Circle
           center={{
             latitude: region.latitude,
@@ -103,40 +93,32 @@ function CustomerMap({ navigation }) {
         />
       </MapView>
 
-      <View style={styles.carouselContainer}>
-    {shops.length > 0 && (
-      <Carousel
-      data={shops}
-      renderItem={({ item }) => (
-        <View style={styles.slide}>
-          <Image source ={{uri: item.imageUrl,"width":100, "height": 129}}/>
-          <Text style={styles.shopName}>{item.shopName}</Text>
-          <Text style={styles.shopId}>{item.shopId}</Text>
-          <Text style = {styles.shopReview}>Review:{item.reviewCount}</Text>
-          <View style={styles.shopStar}>
-            <StarRating rating={item.rating} width={108} height={19} /> 
-          </View>
+      
+        <View style={styles.carouselContainer}>
+          <Carousel
+              ref={carouselRef} 
+              data={shops}
+            renderItem={({ item }) => (
+              <View style={styles.slide}>
+                <Image source={{ uri: item.imageUrl, width: 100, height: 129 }} />
+                <Text style={styles.shopName}>{item.shopName}</Text>
+                <Text style={styles.shopId}>{item.shopId}</Text>
+                <Text style={styles.shopReview}>리뷰 수: {item.reviewCount}</Text>
+                <View style={styles.shopStar}>
+                  <StarRating rating={item.rating} width={108} height={19} /> 
+                </View>
+              </View>
+            )}
+            sliderWidth={width}
+            itemWidth={252}
+            itemHeight={129}
+          />
         </View>
-      )}
-      sliderWidth={width}
-      itemWidth={252}
-      itemHeight={129}
-    />
-  )}
-</View>
-
     </View>
-    </>
   );
 }
 
 const styles = StyleSheet.create({
-  header:{ 
-    width: 393,
-    height: 168,
-    backgroundColor: "#ffb15f",
-    zIndex: 10
-  },
   container: {
     flex: 1,
     justifyContent: 'center',
@@ -146,7 +128,6 @@ const styles = StyleSheet.create({
     ...StyleSheet.absoluteFillObject,
   },
   carouselContainer: {
-    flex: 1,
     position: 'absolute',
     bottom: 20,
     zIndex: 2,
@@ -167,7 +148,7 @@ const styles = StyleSheet.create({
     left: 130,
     top: -110,
   },
-  shopReview:{
+  shopReview: {
     width: 92,
     height: 14,
     top: -140,
@@ -179,58 +160,37 @@ const styles = StyleSheet.create({
     textAlign: "center",
     color: "#77838f",
   },
-  shopStar:{
+  shopStar: {
     left: 70,
     top: -110,
     width: 108,
     height: 19,
   },
-  shopsmarker:{
-    height: 24,
-    width: 34,
-    left: 0,
-    top: 0,
-    borderRadius: 12,
-    backgroundColor: '#A8A8A8'
-  },
-  shopsmarker: {
-    height: 50,
-    width: 100,
-    borderRadius: 8,
-    backgroundColor: 'gray',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  shopRating: {
-    color: 'white',
-    fontSize: 14,
-    fontWeight: 'bold',
-  },
   markerContainer: {
     width: 34,
     height: 24,
     borderRadius: 12,
-    backgroundColor: "#a8a8a8"
+    backgroundColor: "#a8a8a8",
   },
-  markerText:{
-    textAlign: 'center'
+  markerText: {
+    textAlign: 'center',
   },
-  currentmarkerContainer:{ 
+  currentmarkerContainer: {
     width: 46,
     height: 46,
     backgroundColor: "#F05650",
     borderRadius: 50,
     zIndex: 1,
   },
-  currentmarkerInner:{
-  width: 16,
-  height: 16,
-  borderRadius: 50,
-  backgroundColor:'#FFFFFF',
-  zIndex: 3,
-  left: 14,
-  top: 14,
+  currentmarkerInner: {
+    width: 16,
+    height: 16,
+    borderRadius: 50,
+    backgroundColor: '#FFFFFF',
+    zIndex: 3,
+    left: 14,
+    top: 14,
   },
+});
 
-})
 export default CustomerMap;
