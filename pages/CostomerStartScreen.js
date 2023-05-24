@@ -45,7 +45,7 @@ function CostomerStartScreen({navigation, route}){
 
     <View style = {styles.ractangle}>
     <Pressable style = {styles.inputContainer} 
-    onPress={()=> navigation.navigate('CostomerMap')}
+    onPress={()=> navigation.navigate('CustomerMap')}
     >
     <Text style={styles.invalidName}>성수동</Text>
     </Pressable>
@@ -318,7 +318,7 @@ color: '#FFFFFF'
 storeslide: {
   flex: 1,
   width:"100%",
-  top: 170,
+  top: 130,
   Height: 50
  
 },
@@ -359,7 +359,7 @@ name : {
   color: '#000000',
 },
 categoryslide: {
-  top: 100,
+  top: 50,
   height: 400
 }
 });
