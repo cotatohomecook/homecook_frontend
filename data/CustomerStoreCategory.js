@@ -1,6 +1,13 @@
-import React, { useState, useEffect } from 'react';
-import { View, Text, Pressable, ScrollView, StyleSheet, Image } from 'react-native';
-import axios from 'axios';
+import React, { useState, useEffect } from "react";
+import {
+  View,
+  Text,
+  Pressable,
+  ScrollView,
+  StyleSheet,
+  Image,
+} from "react-native";
+import axios from "axios";
 
 const CustomerStoreCategory = () => {
   const [categoryData, setCategoryData] = useState([]);
@@ -17,22 +24,24 @@ const CustomerStoreCategory = () => {
     setIsButtonDisabled(true);
 
     try {
-      let BACKEND_URL = 'http://3.38.33.21:8080/api/shops/list?latitude=37.602643&longitude=126.924805&page=0&size=' + pageSize;
-      let url = '';
+      let BACKEND_URL =
+        "http://3.38.33.21:8080/api/shops/list?latitude=37.602643&longitude=126.924805&page=0&size=" +
+        pageSize;
+      let url = "";
 
       switch (category) {
-        case 'korean':
-          url = BACKEND_URL + '&category=한식';
+        case "korean":
+          url = BACKEND_URL + "&category=한식";
           break;
-        case 'chinese':
-          url = BACKEND_URL + '&category=중식';
+        case "chinese":
+          url = BACKEND_URL + "&category=중식";
           break;
-        case 'western':
-          url = BACKEND_URL + '&category=양식';
+        case "western":
+          url = BACKEND_URL + "&category=양식";
           break;
-        case 'all':
+        case "all":
         default:
-          url = BACKEND_URL + '&category=통합';
+          url = BACKEND_URL + "&category=통합";
           break;
       }
 
@@ -52,7 +61,7 @@ const CustomerStoreCategory = () => {
 
   useEffect(() => {
     if (!initialLoad) {
-      handleButtonPress('all'); // 초기 로드 시 디폴트로 '통합' 버튼 클릭
+      handleButtonPress("all"); // 초기 로드 시 디폴트로 '통합' 버튼 클릭
       setInitialLoad(true);
     }
   }, [initialLoad]);
@@ -61,11 +70,12 @@ const CustomerStoreCategory = () => {
     <View>
       <View style={styles.buttonContainer}>
         <Pressable
-          onPress={() => handleButtonPress('all')}
+          onPress={() => handleButtonPress("all")}
           style={({ pressed }) => [
             styles.button,
             {
-              backgroundColor: selectedCategory === 'all' ? '#ffb15f' : '#ffddb9',
+              backgroundColor:
+                selectedCategory === "all" ? "#ffb15f" : "#ffddb9",
             },
           ]}
           disabled={isButtonDisabled}
@@ -74,11 +84,12 @@ const CustomerStoreCategory = () => {
         </Pressable>
 
         <Pressable
-          onPress={() => handleButtonPress('korean')}
+          onPress={() => handleButtonPress("korean")}
           style={({ pressed }) => [
             styles.button,
             {
-              backgroundColor: selectedCategory === 'korean' ? '#ffb15f' : '#ffddb9',
+              backgroundColor:
+                selectedCategory === "korean" ? "#ffb15f" : "#ffddb9",
             },
           ]}
           disabled={isButtonDisabled}
@@ -87,11 +98,12 @@ const CustomerStoreCategory = () => {
         </Pressable>
 
         <Pressable
-          onPress={() => handleButtonPress('chinese')}
+          onPress={() => handleButtonPress("chinese")}
           style={({ pressed }) => [
             styles.button,
             {
-              backgroundColor: selectedCategory === 'chinese' ? '#ffb15f' : '#ffddb9',
+              backgroundColor:
+                selectedCategory === "chinese" ? "#ffb15f" : "#ffddb9",
             },
           ]}
           disabled={isButtonDisabled}
@@ -100,57 +112,75 @@ const CustomerStoreCategory = () => {
         </Pressable>
 
         <Pressable
-          onPress={() => handleButtonPress('western')}
+          onPress={() => handleButtonPress("western")}
           style={({ pressed }) => [
             styles.button,
             {
-              backgroundColor: selectedCategory === 'western' ? '#ffb15f' : '#ffddb9',
+              backgroundColor:
+                selectedCategory === "western" ? "#ffb15f" : "#ffddb9",
             },
           ]}
           disabled={isButtonDisabled}
         >
           <Text style={styles.buttonText}>양식</Text>
         </Pressable>
-        </View>  
-  
-  <View style={styles.gray}>
-  <Text style={styles.localtext}>성수동</Text>
-  <Text style={styles.text}>의 집밥 랭킹</Text>
-  {showCategoryData && (
-    <ScrollView style = {styles.scroll} contentContainerStyle={styles.scrollContent}>
-      {categoryData.map((item) => (
-        <View style={styles.mapcontainer} key={item.shopId}>
-          <Image style = {styles.imagecontainer} source={{uri: 'https://velog.velcdn.com/images/kkaerrung/post/f2d4402d-d080-4f7b-abc7-a595fe44f2f5/image.png', "width":100, "height": 100}}/>
-          <View style= {styles.rowcontainer}>
-          <Text style = {styles.name}>{item.shopName}</Text>
-          <Text style = {styles.bestmenu}>{item.bestMenuName} </Text>
-          <Text style = {styles.price}>{item.bestMenuPrice}원</Text>
-          <Image style = {styles.imagehome} source ={{uri: 'https://velog.velcdn.com/images/kkaerrung/post/92931914-3138-4031-aeab-c3aafd8772ee/image.png', "width":11,
-         "height": 13, "top": 57, "left" : 305}}/>
-          </View>
-        </View>
-      ))}
-    </ScrollView>
-  )}
-</View>
-</View>
+      </View>
 
-
-  )}
+      <View style={styles.gray}>
+        <Text style={styles.localtext}>성수동</Text>
+        <Text style={styles.text}>의 집밥 랭킹</Text>
+        {showCategoryData && (
+          <ScrollView
+            style={styles.scroll}
+            contentContainerStyle={styles.scrollContent}
+          >
+            {categoryData.map((item) => (
+              <View style={styles.mapcontainer} key={item.shopId}>
+                <Image
+                  style={styles.imagecontainer}
+                  source={{
+                    uri: "https://velog.velcdn.com/images/kkaerrung/post/f2d4402d-d080-4f7b-abc7-a595fe44f2f5/image.png",
+                    width: 100,
+                    height: 100,
+                  }}
+                />
+                <View style={styles.rowcontainer}>
+                  <Text style={styles.name}>{item.shopName}</Text>
+                  <Text style={styles.bestmenu}>{item.bestMenuName} </Text>
+                  <Text style={styles.price}>{item.bestMenuPrice}원</Text>
+                  <Image
+                    style={styles.imagehome}
+                    source={{
+                      uri: "https://velog.velcdn.com/images/kkaerrung/post/92931914-3138-4031-aeab-c3aafd8772ee/image.png",
+                      width: 11,
+                      height: 13,
+                      top: 57,
+                      left: 305,
+                    }}
+                  />
+                </View>
+              </View>
+            ))}
+          </ScrollView>
+        )}
+      </View>
+    </View>
+  );
+};
 export default CustomerStoreCategory;
 
 const styles = StyleSheet.create({
   buttonContainer: {
-    flexDirection: 'row',
+    flexDirection: "row",
     marginBottom: 10,
     zIndex: 5,
     top: 10,
-  ///////
+    ///////
   },
   button: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
     marginHorizontal: 10,
     borderRadius: 5,
     elevation: 4,
@@ -159,10 +189,10 @@ const styles = StyleSheet.create({
     height: 27,
     borderRadius: 9,
     backgroundColor: "#ffb15f",
-    left: 16
+    left: 16,
   },
   buttonPressed: {
-    backgroundColor: '#d5d5d5',
+    backgroundColor: "#d5d5d5",
   },
   buttonText: {
     width: 23,
@@ -173,7 +203,7 @@ const styles = StyleSheet.create({
     fontStyle: "normal",
     letterSpacing: 0,
     textAlign: "left",
-    color: "#ffffff"
+    color: "#ffffff",
   },
   infoContainer: {
     marginTop: 10,
@@ -181,11 +211,11 @@ const styles = StyleSheet.create({
   mapcontainer: {
     marginBottom: 10,
     top: 20,
-    flexDirection: 'row',
+    flexDirection: "row",
     width: 327,
     height: 127,
     borderRadius: 10,
-    backgroundColor: "#ffffff"
+    backgroundColor: "#ffffff",
   },
   gray: {
     top: 30,
@@ -193,9 +223,9 @@ const styles = StyleSheet.create({
     width: 350,
     height: 651,
     borderRadius: 24,
-    backgroundColor: "#ebebeb"
+    backgroundColor: "#ebebeb",
   },
-  text :{
+  text: {
     width: 161.5,
     height: 40,
     left: 155,
@@ -206,9 +236,9 @@ const styles = StyleSheet.create({
     fontStyle: "normal",
     letterSpacing: 0,
     textAlign: "left",
-    color: "#000000"
+    color: "#000000",
   },
-  localtext:{
+  localtext: {
     position: "absolute",
     width: 161.46,
     height: 26.89,
@@ -216,9 +246,9 @@ const styles = StyleSheet.create({
     top: 16,
     fontWeight: "bold",
     fontSize: 20,
-    color: '#3D67FF'
+    color: "#3D67FF",
   },
-  name:{
+  name: {
     width: 113,
     height: 23,
     //fontFamily: "NotoSerifKR",
@@ -229,9 +259,9 @@ const styles = StyleSheet.create({
     textAlign: "left",
     color: "#000000",
     left: 28,
-    top: 14
+    top: 14,
   },
-  bestmenu:{
+  bestmenu: {
     top: 19,
     left: 28,
     width: 100,
@@ -242,12 +272,12 @@ const styles = StyleSheet.create({
     fontStyle: "normal",
     letterSpacing: 0,
     textAlign: "left",
-    color: "#000000"
+    color: "#000000",
   },
-  rowcontainer:{
-    flexDirection: 'column',
+  rowcontainer: {
+    flexDirection: "column",
   },
-  price:{
+  price: {
     top: 58,
     left: 28,
     width: 76,
@@ -258,23 +288,22 @@ const styles = StyleSheet.create({
     fontStyle: "normal",
     letterSpacing: 0,
     textAlign: "left",
-    color: "#000000"
+    color: "#000000",
   },
-  imagecontainer:{
-    top: 14, 
-    left:17,
+  imagecontainer: {
+    top: 14,
+    left: 17,
   },
   scroll: {
     top: 13,
     left: 11,
-    height: '100%',
+    height: "100%",
   },
-  imagehome:{
+  imagehome: {
     top: 6,
-    left: 200
+    left: 200,
   },
   scrollContent: {
     paddingBottom: 300, // 필요한 경우 아래쪽 패딩을 추가하여 맨 마지막 아이템이 가려지지 않도록 함
   },
- 
 });

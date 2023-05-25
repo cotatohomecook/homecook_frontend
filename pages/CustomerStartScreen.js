@@ -1,9 +1,9 @@
 import { View, Text, StyleSheet, Image, Pressable } from "react-native";
 import LocationButton from "../components/Places/LocationButton";
 
-import CostomerStoreRanks from "../data/CostomerStoreRank";
-import CostomerStoreSlide from "../data/CostomerStoreSlide";
-import CostomerStoreCategory from "../data/CostomerStoreCategory";
+import CustomerStoreRanks from "../data/CustomerStoreRank";
+import CustomerStoreSlide from "../data/CustomerStoreSlide";
+import CustomerStoreCategory from "../data/CustomerStoreCategory";
 
 // 음식 슬라이드 더미 데이터 받아오는 코드
 const renderGridItem = (itemData) => {
@@ -27,7 +27,7 @@ const renderButtonItem = (itemData) => {
 
 // 카테고리 버튼
 
-function CostomerStartScreen() {
+function CustomerStartScreen() {
   //화면 출력
   return (
     <>
@@ -52,22 +52,22 @@ function CostomerStartScreen() {
       <Text style={[styles.text]}>지금까지 누적 랭킹입니다.</Text>
 
       <View style={styles.textdesign}>
-        <CostomerStoreRanks />
+        <CustomerStoreRanks />
       </View>
       <Text style={styles.how}> 오늘은 어떤</Text>
       <Text style={styles.food}>음식 </Text>
       <Text style={styles.want}>이 땡기세요?</Text>
 
       <View style={styles.storeslide}>
-        <CostomerStoreSlide />
+        <CustomerStoreSlide />
       </View>
       <View style={styles.categoryslide}>
-        <CostomerStoreCategory />
+        <CustomerStoreCategory />
       </View>
     </>
   );
 }
-export default CostomerStartScreen;
+export default CustomerStartScreen;
 
 //스타일링
 const styles = StyleSheet.create({
