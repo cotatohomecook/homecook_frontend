@@ -8,6 +8,7 @@ import {
   Image,
 } from "react-native";
 import axios from "axios";
+import LocationText from "../components/Places/LocationText";
 
 const CustomerStoreCategory = () => {
   const [categoryData, setCategoryData] = useState([]);
@@ -127,7 +128,12 @@ const CustomerStoreCategory = () => {
       </View>
 
       <View style={styles.gray}>
-        <Text style={styles.localtext}>성수동</Text>
+        <View style={styles.localtextContainer}>
+          <Text style={styles.localtext}>
+            <LocationText />
+          </Text>
+        </View>
+
         <Text style={styles.text}>의 집밥 랭킹</Text>
         {showCategoryData && (
           <ScrollView
