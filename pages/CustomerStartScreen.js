@@ -1,15 +1,6 @@
-import {
-  View,
-  Text,
-  StyleSheet,
-  Image,
-  FlatList,
-  Pressable,
-  ScrollView,
-  TouchableOpacity,
-} from "react-native";
-//import Button from '../components/Button';
-import React, { useState, useEffect } from "react";
+import { View, Text, StyleSheet, Image, Pressable } from "react-native";
+import LocationButton from "../components/Places/LocationButton";
+
 import CustomerStoreRanks from "../data/CustomerStoreRank";
 import CustomerStoreSlide from "../data/CustomerStoreSlide";
 import CustomerStoreCategory from "../data/CustomerStoreCategory";
@@ -36,7 +27,7 @@ const renderButtonItem = (itemData) => {
 
 // 카테고리 버튼
 
-function CustomerStartScreen({ navigation, route }) {
+function CustomerStartScreen() {
   //화면 출력
   return (
     <>
@@ -52,16 +43,11 @@ function CustomerStartScreen({ navigation, route }) {
             }}
           />
         </View>
-
-        <View style={styles.ractangle}>
-          <Pressable
-            style={styles.inputContainer}
-            onPress={() => navigation.navigate("CustomerMap")}
-          >
-            <Text style={styles.invalidName}>성수동</Text>
-          </Pressable>
+        <View style={styles.locationbutton}>
+          <LocationButton />
         </View>
       </View>
+
       <View style={[styles.whitebox]}></View>
       <Text style={[styles.text]}>지금까지 누적 랭킹입니다.</Text>
 
@@ -97,7 +83,6 @@ const styles = StyleSheet.create({
     backgroundColor: "#FFB15F",
     borderRadius: 16,
     zIndex: 2,
-
     elevation: 11,
   },
 
@@ -117,7 +102,10 @@ const styles = StyleSheet.create({
     left: 220.5,
     top: 95,
   },
-
+  locationbutton: {
+    top: 16,
+    left: 90,
+  },
   title: {
     position: "absolute",
     width: 224,
@@ -132,29 +120,6 @@ const styles = StyleSheet.create({
     lineHeigh: 29,
 
     color: "#000000",
-  },
-
-  inputContainer: {
-    width: 69,
-    height: 27,
-    borderRadius: 9,
-    top: -5,
-    backgroundColor: "#ffffff",
-    zIndex: 0,
-    elevation: 5,
-  },
-  invalidName: {
-    width: 34,
-    height: 17,
-    top: 5,
-    left: 15,
-    //fontFamily: "NotoSansKR",
-    fontSize: 12,
-    fontWeight: "bold",
-    fontStyle: "normal",
-    letterSpacing: 0,
-    textAlign: "center",
-    color: "#3d67ff",
   },
 
   whitebox: {
@@ -220,7 +185,6 @@ const styles = StyleSheet.create({
     height: 38,
     left: 170,
     top: 206,
-
     //font-family: 'Noto Sans KR';
     //font-style: normal;
     fontWeight: 900,
@@ -234,7 +198,6 @@ const styles = StyleSheet.create({
     height: 29,
     left: 220,
     top: 210,
-
     //fontFamily: 'Noto Sans KR';
     //font-style: normal;
     fontWeight: 500,
@@ -306,14 +269,12 @@ const styles = StyleSheet.create({
     height: 14,
     textAlign: "center",
     top: 124,
-
     //font-family: 'Noto Serif KR';
     //font-style: normal;
     fontWeight: 500,
     fontSize: 10,
     //line-height: 14px;
     textAlign: "center",
-
     color: "#FFFFFF",
   },
 
@@ -330,7 +291,6 @@ const styles = StyleSheet.create({
     left: 0,
     top: 450,
   },
-
   container: {
     flex: 1,
   },
@@ -346,17 +306,6 @@ const styles = StyleSheet.create({
     paddingVertical: 8,
     borderRadius: 20,
     backgroundColor: "#fff",
-  },
-  ractangle: {
-    position: "absolute",
-    width: 69,
-    height: 27,
-    left: 246,
-    top: 91,
-    zIndex: 0,
-  },
-  name: {
-    color: "#000000",
   },
   categoryslide: {
     top: 50,
