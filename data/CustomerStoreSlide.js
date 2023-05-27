@@ -2,7 +2,7 @@ import { Text, View, StyleSheet, ScrollView, Dimensions, Image, Pressable} from 
 import React, { useState, useEffect, useRef } from 'react';
 import axios from "axios";
 
-function CostomerStoreSlide() {
+function CustomerStoreSlide() {
   const [news, setNews] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -89,7 +89,7 @@ function CostomerStoreSlide() {
   );
 }
 
-export default CostomerStoreSlide;
+export default CustomerStoreSlide;
 
 const styles = StyleSheet.create({
   scrollViewContent: {
