@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import { StatusBar } from "expo-status-bar";
 import { StyleSheet, Image, Platform } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
@@ -10,6 +11,14 @@ import ListScreen from "./ButtomTab/ListScreen";
 import BookmarkScreen from "./ButtomTab/BookmarkScreen";
 import MypageScreen from "./ButtomTab/MypageScreen";
 import { View } from "react-native-animatable";
+=======
+import { StatusBar } from 'expo-status-bar';
+import { StyleSheet } from 'react-native';
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import CostomerStartScreen from './pages/CostomerStartScreen';
+import CustomerMap from './pages/CustomerMap';
+>>>>>>> develop
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -145,6 +154,7 @@ export default function App() {
       <StatusBar style="auto" />
       <NavigationContainer>
         <Stack.Navigator>
+<<<<<<< HEAD
           <Stack.Screen
             name="BottomTabNavigator"
             component={BottomTabNavigator}
@@ -159,6 +169,12 @@ export default function App() {
               headerHeight: 20,
             }}
           />
+=======
+          <Stack.Screen name="CostomerStartScreen" component={CostomerStartScreen} options={{headerShown: false}} />
+          <Stack.Screen name="CustomerMap" component={CustomerMap} options={{headerTitle: '',  headerStyle: { backgroundColor: "#ffb15f"}, headerHeight: 20,
+  }}
+/>
+>>>>>>> develop
         </Stack.Navigator>
       </NavigationContainer>
     </>
