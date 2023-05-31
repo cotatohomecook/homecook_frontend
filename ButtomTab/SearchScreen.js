@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   StyleSheet,
   View,
@@ -8,20 +8,25 @@ import {
   TextInput,
 } from "react-native";
 import { SearchBar } from "react-native-elements";
-import { useEffect, useState } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import DropDownPicker from "react-native-dropdown-picker";
 
 const SearchScreen = ({ closeModal }) => {
   const [searchText, setSearchText] = useState("");
   const [searchResults, setSearchResults] = useState([]);
   const [searchHistory, setSearchHistory] = useState([]);
-  const [isSearchByMenu, setIsSearchByMenu] = useState(false);
-  const [isSearchByShopName, setIsSearchByShopName] = useState(false);
+  const [searchType, setSearchType] = useState("");
+
+  const [open, setOpen] = useState(false);
+  const [value, setValue] = useState(null);
+  const [items, setItems] = useState([
+    { label: "상호명", value: "상호명" },
+    { label: "메뉴명", value: "메뉴명" },
+  ]);
 
   // 검색 기록 초기화
   const clearSearchHistory = async () => {
     try {
-      await AsyncStorage.removeItem("searchHistory");
       setSearchHistory([]);
     } catch (error) {
       console.error("검색 기록 초기화 에러:", error);
@@ -43,7 +48,7 @@ const SearchScreen = ({ closeModal }) => {
   // 검색 기록 저장하기
   const saveSearchHistory = async (keyword) => {
     try {
-      const updatedHistory = [...searchHistory, keyword];
+      const updatedHistory = [...searchHistory, { keyword, searchType }];
       await AsyncStorage.setItem(
         "searchHistory",
         JSON.stringify(updatedHistory)
@@ -62,10 +67,17 @@ const SearchScreen = ({ closeModal }) => {
       );
       const data = await response.json();
       setSearchResults(data.data.content);
+
+      setSearchText(""); // 검색 완료 후에 검색어 리셋
     } catch (error) {
       console.error("검색 에러:", error);
     }
   };
+
+  const handleDropdownChange = (selectedValue) => {
+    setSearchType(selectedValue);
+  };
+
   useEffect(() => {
     // 검색 기록 불러오기
     loadSearchHistory();
@@ -73,6 +85,17 @@ const SearchScreen = ({ closeModal }) => {
 
   return (
     <>
+      <DropDownPicker
+        open={open}
+        value={value}
+        items={items}
+        setOpen={setOpen}
+        setValue={setValue}
+        setItems={setItems}
+        placeholder="필터"
+        style={styles.dropdown}
+        onChangeValue={handleDropdownChange}
+      />
       <TextInput
         placeholder="검색어를 입력하세요"
         style={styles.searchWord}
@@ -83,20 +106,17 @@ const SearchScreen = ({ closeModal }) => {
         inputContainerStyle={{ backgroundColor: "#e0e0e0" }}
         cancelButtonProps={{ buttonTextStyle: { color: "gray" } }}
       />
-      <View>
+      <View style={styles.history}>
         <FlatList
-          data={searchHistory}
-          renderItem={({ item }) => (
-            <Text style={styles.searchHistory}>{item}</Text>
-          )}
+          data={searchHistory.filter((item) => item.searchType === searchType)} // 검색 타입에 맞게 필터링
+          renderItem={({ item }) => <Text>{item.keyword}</Text>}
           keyExtractor={(item, index) => index.toString()}
-          contentContainerStyle={styles.searchHistoryContainer}
         />
-        <Text onPress={clearSearchHistory}>검색 기록 초기화</Text>
+        <Text style={styles.clearbutton} onPress={clearSearchHistory}>
+          검색 기록 초기화
+        </Text>
+        <Text onPress={closeModal}>close</Text>
       </View>
-      <TouchableOpacity onPress={closeModal}>
-        <Text style={styles.closeButton}>Close</Text>
-      </TouchableOpacity>
     </>
   );
 };
@@ -114,7 +134,7 @@ const styles = StyleSheet.create({
     textAlign: "left",
     color: "#afafaf",
     left: 66,
-    top: 12,
+    top: 100,
   },
   searchHistory: {
     width: 52,
@@ -126,5 +146,16 @@ const styles = StyleSheet.create({
     textAlign: "left",
     color: "#7d7d7d",
     paddingVertical: 5,
+    top: 120,
+  },
+  clearbutton: {
+    top: 190,
+  },
+  closebutton: {
+    top: 200,
+  },
+  dropdown: {},
+  history: {
+    top: 100,
   },
 });
