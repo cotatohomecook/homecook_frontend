@@ -12,11 +12,12 @@ import MypageScreen from "./ButtomTab/MypageScreen";
 import { View } from "react-native-animatable";
 import React, { useState } from "react";
 import { Modal, Text, TouchableOpacity } from "react-native";
+import SearchResult from "./components/Search/SearchResult";
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 
-function BottomTabNavigator() {
+function BottomTabNavigator({ navigation }) {
   const [searchModalVisible, setSearchModalVisible] = useState(false);
 
   const openSearchModal = () => {
@@ -136,6 +137,7 @@ function BottomTabNavigator() {
               />
             ),
           }}
+          initialParams={{ navigation }} // navigation prop을 전달합니다.
         />
 
         <Tab.Screen
@@ -189,6 +191,8 @@ export default function App() {
               headerHeight: 20,
             }}
           />
+          <Stack.Screen name="SearchScreen" component={SearchScreen} />
+          <Stack.Screen name="SearchResult" component={SearchResult} />
         </Stack.Navigator>
       </NavigationContainer>
     </>

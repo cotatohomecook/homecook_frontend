@@ -8,15 +8,16 @@ import {
   TextInput,
   Image,
 } from "react-native";
-import { SearchBar } from "react-native-elements";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import DropDownPicker from "react-native-dropdown-picker";
+import { useNavigation } from "@react-navigation/native";
 
-const SearchScreen = ({ closeModal, navigation }) => {
+const SearchScreen = ({ closeModal }) => {
+  const navigation = useNavigation();
   const [searchText, setSearchText] = useState("");
   const [searchResults, setSearchResults] = useState([]);
   const [searchHistory, setSearchHistory] = useState([]);
-  const [searchType, setSearchType] = useState("");
+  const [searchType, setSearchType] = useState("상호명"); // 기본값 설정
 
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState("상호명");
@@ -68,19 +69,17 @@ const SearchScreen = ({ closeModal, navigation }) => {
   const handleSearch = async () => {
     try {
       saveSearchHistory(searchText);
-      const response = await fetch(
-        `http://3.38.33.21:8080/api/shops/search?latitude=37.60264&longitude=126.924805&shopName=${searchText}&page=0&size=10&orderBy=distance`
-      );
-      const data = await response.json();
-      setSearchResults(data.data.content);
-      setSearchText(""); // 검색 완료 후에 검색어 리셋
+      closeModal();
+      navigation.navigate("SearchResult", { searchText, searchType });
     } catch (error) {
       console.error("검색 에러:", error);
     }
   };
+
   const handleDropdownChange = (selectedValue) => {
     setSearchType(selectedValue);
   };
+
   useEffect(() => {
     loadSearchHistory();
   }, []);
