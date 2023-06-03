@@ -52,7 +52,7 @@ const SearchScreen = ({ closeModal }) => {
     }
   };
 
-  //검색 기록 삭제하기
+  // 검색 기록 삭제하기
   const deleteSearchHistory = async (index) => {
     try {
       const updatedHistory = searchHistory.filter((_, i) => i !== index);
@@ -78,6 +78,17 @@ const SearchScreen = ({ closeModal }) => {
 
   const handleDropdownChange = (selectedValue) => {
     setSearchType(selectedValue);
+  };
+
+  const handleSearchHistoryClick = async (keyword, searchType) => {
+    try {
+      setSearchText(keyword);
+      setSearchType(searchType);
+      closeModal();
+      navigation.navigate("SearchResult", { searchText: keyword, searchType });
+    } catch (error) {
+      console.error("검색 에러:", error);
+    }
   };
 
   useEffect(() => {
@@ -112,7 +123,7 @@ const SearchScreen = ({ closeModal }) => {
         />
       </View>
       <TextInput
-        placeholder="검색어를 입력하세요"
+        placeholder="검색어를 입력해주세요."
         style={styles.searchWord}
         onChangeText={setSearchText}
         value={searchText}
@@ -133,9 +144,13 @@ const SearchScreen = ({ closeModal }) => {
       </TouchableOpacity>
       <View style={styles.history}>
         <FlatList
-          data={searchHistory.filter((item) => item.searchType === searchType)} // 검색 타입에 맞게 필터링
+          data={searchHistory.filter((item) => item.searchType === searchType)}
           renderItem={({ item, index }) => (
-            <>
+            <TouchableOpacity
+              onPress={() =>
+                handleSearchHistoryClick(item.keyword, item.searchType)
+              }
+            >
               <View style={styles.searchcontainer}>
                 <Image
                   source={{
@@ -156,9 +171,8 @@ const SearchScreen = ({ closeModal }) => {
                   ></Image>
                 </TouchableOpacity>
               </View>
-            </>
+            </TouchableOpacity>
           )}
-          keyExtractor={(item, index) => index.toString()}
         />
       </View>
     </>
@@ -171,14 +185,14 @@ const styles = StyleSheet.create({
   searchWord: {
     width: 175,
     height: 26,
-    fontSize: 18,
+    fontSize: 17,
     fontWeight: "500",
     fontStyle: "normal",
     letterSpacing: 0,
     textAlign: "left",
     color: "#afafaf",
-    left: 66,
-    top: 30,
+    left: 45,
+    top: 5,
   },
   searchhistory: {
     width: 52,
@@ -222,8 +236,8 @@ const styles = StyleSheet.create({
     position: "absolute",
     width: 20,
     height: 20,
-    left: 16,
-    top: 6,
+    left: 5,
+    top: -15,
   },
   dropdownarrow: {
     color: "F3AC61",
@@ -234,5 +248,8 @@ const styles = StyleSheet.create({
   deleteButton: {
     left: 222,
   },
-  history: { top: 60 },
+  history: {
+    top: 45,
+    height: 400,
+  },
 });

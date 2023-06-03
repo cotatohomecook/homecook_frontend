@@ -137,7 +137,7 @@ function BottomTabNavigator({ navigation }) {
               />
             ),
           }}
-          initialParams={{ navigation }} // navigation prop을 전달합니다.
+          initialParams={{ closeModal: closeSearchModal }}
         />
 
         <Tab.Screen
@@ -191,8 +191,16 @@ export default function App() {
               headerHeight: 20,
             }}
           />
-          <Stack.Screen name="SearchScreen" component={SearchScreen} />
-          <Stack.Screen name="SearchResult" component={SearchResult} />
+          <Stack.Screen
+            name="SearchScreen"
+            component={SearchScreen}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="SearchResult"
+            component={SearchResult}
+            options={{ headerShown: false }}
+          />
         </Stack.Navigator>
       </NavigationContainer>
     </>
