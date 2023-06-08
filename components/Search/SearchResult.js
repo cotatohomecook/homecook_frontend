@@ -12,12 +12,15 @@ import {
 import Header from "../../common/Header";
 import ContentBox from "../../common/ContentBox";
 import ModalComponent from "../../common/ModalComponent";
+import SortButton from "../../common/SortButton";
 
 const SearchResult = ({ route }) => {
   const { searchText, searchType } = route.params;
   const [searchResults, setSearchResults] = useState([]);
   const [loading, setLoading] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
+  const [orderByDistance, setOrderByDistance] = useState(false);
+
   const handleResultPress = () => {
     setModalVisible(true);
   };
@@ -26,23 +29,34 @@ const SearchResult = ({ route }) => {
     setModalVisible(false);
   };
 
-  const handleBackPress = () => {
-    navigation.goBack();
+  const handleDefaultSort = () => {
+    setOrderByDistance(false);
+  };
+
+  const toggleOrderByDistance = () => {
+    setOrderByDistance(!orderByDistance);
   };
 
   useEffect(() => {
     const fetchSearchResults = async () => {
       try {
-        setLoading(true); // 로딩 상태를 true로 설정
+        setLoading(true);
+
+        const orderBy = orderByDistance ? "distance" : "reviewCount";
 
         const url =
           searchType === "상호명"
-            ? `http://3.38.33.21:8080/api/shops/search?latitude=37.60264&longitude=126.924805&shopName=${searchText}&page=0&size=10&orderBy=distance`
-            : `http://3.38.33.21:8080/api/shops/search?latitude=37.602643&longitude=126.924805&menuName=${searchText}&page=0&size=10&orderBy=reviewCount`;
+            ? `http://3.38.33.21:8080/api/shops/search?latitude=37.60264&longitude=126.924805&shopName=${searchText}&page=0&size=10&orderBy=${orderBy}`
+            : `http://3.38.33.21:8080/api/shops/search?latitude=37.602643&longitude=126.924805&menuName=${searchText}&page=0&size=10&orderBy=${orderBy}`;
 
         const response = await fetch(url);
         const data = await response.json();
-        setSearchResults(data.data.content);
+
+        let sortedResults = data.data.content;
+        if (orderByDistance) {
+          sortedResults = sortedResults.sort((a, b) => a.distance - b.distance);
+        }
+        setSearchResults(sortedResults);
       } catch (error) {
         console.error("검색 에러:", error);
       } finally {
@@ -51,7 +65,11 @@ const SearchResult = ({ route }) => {
     };
 
     fetchSearchResults();
-  }, [searchText]);
+  }, [searchText, orderByDistance]);
+
+  useEffect(() => {
+    handleDefaultSort(); // 컴포넌트가 마운트될 때 기본적으로 "기본순"으로 설정
+  }, []); // 빈 배열은 컴포넌트가 처음 마운트될 때만 실행되도록 설정
 
   if (loading) {
     return (
@@ -72,6 +90,21 @@ const SearchResult = ({ route }) => {
         <TouchableOpacity onPress={handleResultPress} style={styles.white}>
           <Text style={styles.searchtext}>{searchText}</Text>
         </TouchableOpacity>
+        <View style={styles.buttoncontainer}>
+          <SortButton
+            label={"기본순"}
+            onPress={handleDefaultSort}
+            active={!orderByDistance}
+          ></SortButton>
+          <SortButton
+            label={"거리순"}
+            onPress={toggleOrderByDistance}
+            active={orderByDistance}
+          ></SortButton>
+          {/* 인기순과 배달빠른순은 미구현 상태*/}
+          <SortButton label={"인기순"}></SortButton>
+          <SortButton label={"배달빠른순"}></SortButton>
+        </View>
         <FlatList
           data={searchResults}
           keyExtractor={(item) => item.shopId}
@@ -101,6 +134,11 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
+  },
+  buttoncontainer: {
+    flexDirection: "row",
+    justifyContent: "space-around",
+    marginBottom: 10,
   },
   white: {
     height: 39,
