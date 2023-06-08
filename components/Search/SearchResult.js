@@ -9,10 +9,12 @@ import {
   FlatList,
   Modal,
 } from "react-native";
+import { useNavigation } from "@react-navigation/native";
 import Header from "../../common/Header";
 import ContentBox from "../../common/ContentBox";
 import ModalComponent from "../../common/ModalComponent";
 import SortButton from "../../common/SortButton";
+import BackButton from "../../common/BackButton";
 
 const SearchResult = ({ route }) => {
   const { searchText, searchType } = route.params;
@@ -20,6 +22,8 @@ const SearchResult = ({ route }) => {
   const [loading, setLoading] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
   const [orderByDistance, setOrderByDistance] = useState(false);
+
+  const navigation = useNavigation();
 
   const handleResultPress = () => {
     setModalVisible(true);
@@ -35,6 +39,10 @@ const SearchResult = ({ route }) => {
 
   const toggleOrderByDistance = () => {
     setOrderByDistance(!orderByDistance);
+  };
+
+  const handleGoBack = () => {
+    navigation.goBack();
   };
 
   useEffect(() => {
@@ -87,9 +95,12 @@ const SearchResult = ({ route }) => {
     <>
       <Header height={139} style={styles.header} />
       <View style={styles.container}>
-        <TouchableOpacity onPress={handleResultPress} style={styles.white}>
-          <Text style={styles.searchtext}>{searchText}</Text>
-        </TouchableOpacity>
+        <View style={styles.headercontainer}>
+          <BackButton onPress={handleGoBack} />
+          <TouchableOpacity onPress={handleResultPress} style={styles.whitebox}>
+            <Text style={styles.searchtext}>{searchText}</Text>
+          </TouchableOpacity>
+        </View>
         <View style={styles.buttoncontainer}>
           <SortButton
             label={"기본순"}
@@ -132,15 +143,13 @@ const styles = StyleSheet.create({
   header: {
     zIndex: 1,
   },
-  container: {
-    flex: 1,
-  },
+
   buttoncontainer: {
     flexDirection: "row",
     justifyContent: "space-around",
-    marginBottom: 10,
+    top: -10,
   },
-  white: {
+  whitebox: {
     height: 39,
     top: -70,
     left: 77,

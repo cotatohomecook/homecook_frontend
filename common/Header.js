@@ -9,6 +9,7 @@ const styles = StyleSheet.create({
   header: {
     backgroundColor: "#F3AC61",
     borderRadius: 20,
+    elevation: 5,
   },
 });
 
