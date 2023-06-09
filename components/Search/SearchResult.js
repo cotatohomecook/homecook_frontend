@@ -86,10 +86,6 @@ const SearchResult = ({ route }) => {
     );
   }
 
-  if (searchResults.length === 0) {
-    return <Text>검색 결과가 없습니다!</Text>;
-  }
-
   return (
     <>
       <Header height={139} style={styles.header} />
@@ -130,6 +126,11 @@ const SearchResult = ({ route }) => {
               ></ContentBox>
             </View>
           )}
+          ListEmptyComponent={() => (
+            <View style={styles.noresultContainer}>
+              <Text style={styles.noresult}>검색 결과가 없습니다.</Text>
+            </View>
+          )}
         />
       </View>
       <ModalComponent modalVisible={modalVisible} closeModal={closeModal} />
@@ -141,6 +142,14 @@ export default SearchResult;
 const windowHeight = Dimensions.get("window").height; // 화면의 높이
 
 const styles = StyleSheet.create({
+  noresult: {
+    width: 193,
+    height: 23,
+    left: 25,
+    fontWeight: 500,
+    fontSize: 16,
+    color: "#AFAFAF",
+  },
   header: {
     zIndex: 1,
   },
@@ -172,5 +181,11 @@ const styles = StyleSheet.create({
     elevation: 3,
     marginBottom: 20,
     alignItems: "center",
+  },
+  noresultContainer: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
+    marginTop: 250, // 이 부분을 수정하여 메시지가 화면에서 보이도록 조정
   },
 });
