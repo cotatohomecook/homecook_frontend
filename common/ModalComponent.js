@@ -1,6 +1,6 @@
 import React from "react";
 import { Modal, View, StyleSheet } from "react-native";
-import SearchScreen from "../ButtomTab/SearchScreen";
+import SearchScreen from "../navigator/BottomTab/SearchScreen";
 
 const ModalComponent = ({ modalVisible, closeModal }) => {
   return (

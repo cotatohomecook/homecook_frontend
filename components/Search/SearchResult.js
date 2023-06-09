@@ -154,7 +154,7 @@ const styles = StyleSheet.create({
     zIndex: 1,
   },
   container: {
-    height: windowHeight - 80,
+    height: windowHeight - 135,
   },
   buttoncontainer: {
     flexDirection: "row",
