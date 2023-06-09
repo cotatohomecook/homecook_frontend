@@ -5,9 +5,8 @@ import {
   ActivityIndicator,
   TouchableOpacity,
   StyleSheet,
-  Image,
   FlatList,
-  Modal,
+  Dimensions,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import Header from "../../common/Header";
@@ -139,11 +138,15 @@ const SearchResult = ({ route }) => {
 };
 export default SearchResult;
 
+const windowHeight = Dimensions.get("window").height; // 화면의 높이
+
 const styles = StyleSheet.create({
   header: {
     zIndex: 1,
   },
-
+  container: {
+    height: windowHeight - 80,
+  },
   buttoncontainer: {
     flexDirection: "row",
     justifyContent: "space-around",
