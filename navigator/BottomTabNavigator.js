@@ -7,6 +7,7 @@ import CustomerStartScreen from "../pages/CustomerStartScreen";
 import SearchScreen from "./BottomTab/SearchScreen";
 import MypageScreen from "./BottomTab/MypageScreen";
 import SearchResult from "../components/Search/SearchResult";
+import ModalComponent from "../common/ModalComponent";
 
 const Tab = createBottomTabNavigator();
 
@@ -171,13 +172,10 @@ export default function BottomTabNavigator() {
         />
       </Tab.Navigator>
 
-      <Modal visible={searchModalVisible} animationType="slide" transparent>
-        <View style={styles.modalContainer}>
-          <View style={styles.modalContent}>
-            <SearchScreen closeModal={closeSearchModal} />
-          </View>
-        </View>
-      </Modal>
+      <ModalComponent
+        modalVisible={searchModalVisible}
+        closeModal={closeSearchModal}
+      />
     </View>
   );
 }

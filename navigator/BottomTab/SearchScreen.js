@@ -15,7 +15,6 @@ import { useNavigation } from "@react-navigation/native";
 const SearchScreen = ({ closeModal }) => {
   const navigation = useNavigation();
   const [searchText, setSearchText] = useState("");
-  const [searchResults, setSearchResults] = useState([]);
   const [searchHistory, setSearchHistory] = useState([]);
   const [searchType, setSearchType] = useState("상호명"); // 기본값 설정
 
@@ -63,6 +62,15 @@ const SearchScreen = ({ closeModal }) => {
       setSearchHistory(updatedHistory);
     } catch (error) {
       console.error("검색 기록 삭제 에러:", error);
+    }
+  };
+
+  // 검색 기록 초기화
+  const clearSearchHistory = async () => {
+    try {
+      setSearchHistory([]);
+    } catch (error) {
+      console.error("검색 기록 초기화 에러:", error);
     }
   };
 
@@ -168,12 +176,19 @@ const SearchScreen = ({ closeModal }) => {
                       width: 19,
                       height: 19,
                     }}
-                  ></Image>
+                  />
                 </TouchableOpacity>
               </View>
             </TouchableOpacity>
           )}
         />
+        {searchHistory.length > 0 && (
+          <TouchableOpacity onPress={clearSearchHistory}>
+            <View style={styles.resetbutton}>
+              <Text style={styles.resettext}>전체삭제</Text>
+            </View>
+          </TouchableOpacity>
+        )}
       </View>
     </>
   );
@@ -187,12 +202,11 @@ const styles = StyleSheet.create({
     height: 26,
     fontSize: 17,
     fontWeight: "500",
-    fontStyle: "normal",
     letterSpacing: 0,
     textAlign: "left",
     color: "#afafaf",
     left: 45,
-    top: 5,
+    top: 6,
   },
   searchhistory: {
     width: 52,
@@ -201,8 +215,6 @@ const styles = StyleSheet.create({
     left: 40,
     top: 5,
     fontWeight: "500",
-    fontStyle: "normal",
-    letterSpacing: 0,
     textAlign: "left",
     color: "#7d7d7d",
     paddingVertical: 5,
@@ -237,7 +249,7 @@ const styles = StyleSheet.create({
     width: 20,
     height: 20,
     left: 5,
-    top: -15,
+    top: -17,
   },
   dropdownarrow: {
     color: "F3AC61",
@@ -248,8 +260,22 @@ const styles = StyleSheet.create({
   deleteButton: {
     left: 222,
   },
+  resetbutton: {
+    width: 66,
+    height: 26,
+    left: 265,
+    top: 5,
+    backgroundColor: "#E7E7E7",
+    borderRadius: 13,
+  },
+  resettext: {
+    fontWeight: "bold",
+    fontSize: 12,
+    textAlign: "center",
+    top: 5,
+  },
   history: {
     top: 45,
-    height: 400,
+    height: 390,
   },
 });
