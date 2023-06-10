@@ -1,5 +1,5 @@
 import React from "react";
-import { View, StyleSheet, Image, Text } from "react-native";
+import { View, StyleSheet, Image, Text, TouchableOpacity } from "react-native";
 import StarRating from "./StarRating";
 
 const ContentBox = ({ width, height, imgUrl, title, detail, rating }) => {
@@ -18,6 +18,18 @@ const ContentBox = ({ width, height, imgUrl, title, detail, rating }) => {
             <View style={styles.ratingStar}>
               <StarRating rating={rating} width={65} height={12} />
             </View>
+            <TouchableOpacity
+              onPress={() => handleBookmark(item.shopId, item.shopName)}
+            >
+              <Image
+                style={styles.bookmark}
+                source={{
+                  uri: "https://velog.velcdn.com/images/kkaerrung/post/f3e7ba16-f0eb-4be2-9b5c-c3f5660cb647/image.png",
+                  width: 34.7,
+                  height: 33,
+                }}
+              ></Image>
+            </TouchableOpacity>
           </View>
         )}
       </View>
@@ -70,6 +82,10 @@ const styles = StyleSheet.create({
   ratingStar: {
     top: 9,
     left: 10,
+  },
+  bookmark: {
+    left: 120,
+    top: -5,
   },
 });
 

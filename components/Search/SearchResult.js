@@ -10,10 +10,10 @@ import {
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import Header from "../../common/Header";
-import ContentBox from "../../common/ContentBox";
 import ModalComponent from "../../common/ModalComponent";
 import SortButton from "../../common/SortButton";
 import BackButton from "../../common/BackButton";
+import SearchResultList from "./SearchResultList";
 
 const SearchResult = ({ route }) => {
   const { searchText, searchType } = route.params;
@@ -75,8 +75,8 @@ const SearchResult = ({ route }) => {
   }, [searchText, orderByDistance]);
 
   useEffect(() => {
-    handleDefaultSort(); // 컴포넌트가 마운트될 때 기본적으로 "기본순"으로 설정
-  }, []); // 빈 배열은 컴포넌트가 처음 마운트될 때만 실행되도록 설정
+    handleDefaultSort();
+  }, []);
 
   if (loading) {
     return (
@@ -114,18 +114,7 @@ const SearchResult = ({ route }) => {
         <FlatList
           data={searchResults}
           keyExtractor={(item) => item.shopId}
-          renderItem={({ item }) => (
-            <View style={styles.resultbox} key={item.shopId}>
-              <ContentBox
-                width={371}
-                height={116}
-                imgUrl={item.imageUrl}
-                title={item.shopName}
-                detail={item.bestMenuName}
-                rating={item.rating}
-              ></ContentBox>
-            </View>
-          )}
+          renderItem={({ item }) => <SearchResultList item={item} />}
           ListEmptyComponent={() => (
             <View style={styles.noresultContainer}>
               <Text style={styles.noresult}>검색 결과가 없습니다.</Text>
@@ -137,19 +126,12 @@ const SearchResult = ({ route }) => {
     </>
   );
 };
+
 export default SearchResult;
 
-const windowHeight = Dimensions.get("window").height; // 화면의 높이
+const windowHeight = Dimensions.get("window").height;
 
 const styles = StyleSheet.create({
-  noresult: {
-    width: 193,
-    height: 23,
-    left: 25,
-    fontWeight: 500,
-    fontSize: 16,
-    color: "#AFAFAF",
-  },
   header: {
     zIndex: 1,
   },
@@ -177,15 +159,18 @@ const styles = StyleSheet.create({
     fontSize: 16,
     left: 16,
   },
-  resultbox: {
-    elevation: 3,
-    marginBottom: 20,
-    alignItems: "center",
-  },
   noresultContainer: {
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
-    marginTop: 250, // 이 부분을 수정하여 메시지가 화면에서 보이도록 조정
+    marginTop: 250,
+  },
+  noresult: {
+    width: 193,
+    height: 23,
+    left: 25,
+    fontWeight: 500,
+    fontSize: 16,
+    color: "#AFAFAF",
   },
 });
