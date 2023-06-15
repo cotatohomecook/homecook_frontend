@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { View, Image, Modal, StyleSheet } from "react-native";
+import { View, Image, Modal, StyleSheet, Dimensions } from "react-native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import ListScreen from "./BottomTab/ListScreen";
 import BookmarkScreen from "./BottomTab/BookmarkScreen";
@@ -8,11 +8,14 @@ import SearchScreen from "./BottomTab/SearchScreen";
 import MypageScreen from "./BottomTab/MypageScreen";
 import SearchResult from "../components/Search/SearchResult";
 import ModalComponent from "../common/ModalComponent";
+import store from "../store/redux/store";
+import { Provider } from "react-redux";
 
 const Tab = createBottomTabNavigator();
 
 export default function BottomTabNavigator() {
   const [searchModalVisible, setSearchModalVisible] = useState(false);
+  const { width, height } = Dimensions.get("window");
 
   const openSearchModal = () => {
     setSearchModalVisible(true);
@@ -24,7 +27,7 @@ export default function BottomTabNavigator() {
 
   return (
     <Provider store={store}>
-      <View style={{ flex: 1 }}>
+      <View style={{ width: "100%", height: "100%" }}>
         <Tab.Navigator
           initialRouteName="CustomerStartScreen"
           screenOptions={({ route }) => ({
@@ -182,6 +185,11 @@ export default function BottomTabNavigator() {
   );
 }
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    position: "relative",
+    paddingBottom: 0,
+  },
   modalContainer: {
     flex: 1,
     justifyContent: "center",
