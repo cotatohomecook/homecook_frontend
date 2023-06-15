@@ -91,7 +91,7 @@ const SearchResult = ({ route }) => {
       <Header height={139} style={styles.header} />
       <View style={styles.container}>
         <View style={styles.headercontainer}>
-          <BackButton onPress={handleGoBack} />
+          <BackButton onPress={handleGoBack} top={-58} />
           <TouchableOpacity onPress={handleResultPress} style={styles.whitebox}>
             <Text style={styles.searchtext}>{searchText}</Text>
           </TouchableOpacity>
@@ -136,7 +136,7 @@ const styles = StyleSheet.create({
     zIndex: 1,
   },
   container: {
-    height: windowHeight - 135,
+    height: windowHeight - 145,
   },
   buttoncontainer: {
     flexDirection: "row",

@@ -1,10 +1,28 @@
 import React from "react";
 import { View, TouchableOpacity, Image, StyleSheet } from "react-native";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigation } from "@react-navigation/native";
+import { addFavorite, removeFavorite } from "../../store/redux/bookmark";
 import ContentBox from "../../common/ContentBox";
 
 const SearchResultList = ({ item }) => {
+  const dispatch = useDispatch();
+  const favorites = useSelector((state) => state.bookmark.ids);
+
+  const isFavorite = favorites.includes(item.shopId);
+  const navigation = useNavigation();
+
+  const handleToggleFavorite = () => {
+    if (isFavorite) {
+      dispatch(removeFavorite({ id: item.shopId }));
+    } else {
+      dispatch(addFavorite({ id: item.shopId }));
+    }
+    navigation.navigate("AddBookmarkScreen");
+  };
+
   return (
-    <View style={styles.resultbox}>
+    <View>
       <ContentBox
         width={371}
         height={116}
@@ -12,32 +30,11 @@ const SearchResultList = ({ item }) => {
         title={item.shopName}
         detail={item.bestMenuName}
         rating={item.rating}
-      >
-        <TouchableOpacity>
-          <Image
-            style={styles.bookmark}
-            source={{
-              uri: "https://velog.velcdn.com/images/kkaerrung/post/f3e7ba16-f0eb-4be2-9b5c-c3f5660cb647/image.png",
-              width: 34.7,
-              height: 33,
-            }}
-          ></Image>
-        </TouchableOpacity>
-      </ContentBox>
+        handleToggleFavorite={handleToggleFavorite}
+        isFavorite={isFavorite}
+      />
     </View>
   );
 };
 
 export default SearchResultList;
-
-const styles = StyleSheet.create({
-  resultbox: {
-    elevation: 3,
-    marginBottom: 20,
-    alignItems: "center",
-  },
-  bookmark: {
-    left: 120,
-    top: -5,
-  },
-});
