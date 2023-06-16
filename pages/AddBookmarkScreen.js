@@ -8,10 +8,12 @@ import {
   TextInput,
   ScrollView,
 } from "react-native";
+import { useNavigation, useRoute } from "@react-navigation/native";
 import Header from "../common/Header";
 import BackButton from "../common/BackButton";
 import { addCategory, sendBookmarkData } from "../store/redux/bookmark";
 import { useDispatch, useSelector } from "react-redux";
+import RegistrationModal from "../common/RegistrationModal";
 
 const FavoriteCategoryButton = ({ title, onPress }) => {
   return (
@@ -38,7 +40,9 @@ const FavoriteCategoryButton = ({ title, onPress }) => {
   );
 };
 
-const FavoriteScreen = () => {
+const FavoriteScreen = ({ route }) => {
+  const searchText = route.params && route.params.searchText;
+  const navigation = useNavigation();
   const dispatch = useDispatch();
   const favoriteCategories = useSelector((state) => state.bookmark.categories);
   const selectedCategory = useSelector(
@@ -52,6 +56,7 @@ const FavoriteScreen = () => {
 
   const [newCategory, setNewCategory] = useState("");
   const [showNewCategoryInput, setShowNewCategoryInput] = useState(false);
+  const [isModalVisible, setIsModalVisible] = useState(false);
 
   const handleAddCategoryPress = () => {
     setShowNewCategoryInput(!showNewCategoryInput);
@@ -61,9 +66,6 @@ const FavoriteScreen = () => {
     if (newCategory.trim()) {
       dispatch(addCategory(newCategory));
       setNewCategory("");
-      dispatch(
-        sendBookmarkData({ ids: favoriteIds, categories: favoriteCategories })
-      );
     }
     setShowNewCategoryInput(false);
   };
@@ -71,9 +73,19 @@ const FavoriteScreen = () => {
   const handleCategoryInputChange = (text) => {
     setNewCategory(text);
   };
+  const handleModalConfirm = () => {
+    setIsModalVisible(false);
+    navigation.navigate("BookmarkScreen");
+  };
 
-  const handleDeleteCategory = (category) => {
-    dispatch(deleteBookmarkData({ id: category, category }));
+  const handleModalCancel = () => {
+    setIsModalVisible(false);
+    navigation.navigate("SearchResult", { searchText: searchText });
+  };
+
+  const handleCategoryPress = (category) => {
+    setIsModalVisible(true);
+    dispatch(sendBookmarkData({ ids: favoriteIds, categories: [category] }));
   };
 
   return (
@@ -82,7 +94,7 @@ const FavoriteScreen = () => {
       contentContainerStyle={styles.contentContainer}
       keyboardShouldPersistTaps="handled"
     >
-      <TouchableOpacity activeOpacity={1} style={styles.screen}>
+      <TouchableOpacity activeOpacity={0.8} style={styles.screen}>
         <Header height={114} title={"즐겨찾기"} />
         <BackButton onPress={handleGoBack} top={-45} />
         <Image
@@ -98,11 +110,7 @@ const FavoriteScreen = () => {
             <FavoriteCategoryButton
               key={category}
               title={category}
-              onPress={() =>
-                dispatch(
-                  sendBookmarkData({ ids: favoriteIds, categories: [category] })
-                )
-              }
+              onPress={() => handleCategoryPress(category)}
             />
           ))}
           {showNewCategoryInput ? (
@@ -120,19 +128,22 @@ const FavoriteScreen = () => {
           ) : (
             <TouchableOpacity onPress={handleAddCategoryPress}>
               <Image
+                style={{ marginTop: 17 }}
                 source={{
                   uri: "https://velog.velcdn.com/images/kkaerrung/post/88b67bfb-585b-43e1-b49d-643690665248/image.png",
                   width: 61,
                   height: 61,
                 }}
-                style={{
-                  marginTop: 21,
-                }}
-              />
+              ></Image>
             </TouchableOpacity>
           )}
         </View>
       </TouchableOpacity>
+      <RegistrationModal
+        visible={isModalVisible}
+        onConfirm={handleModalConfirm}
+        onCancel={handleModalCancel}
+      />
     </ScrollView>
   );
 };
@@ -194,11 +205,6 @@ const styles = StyleSheet.create({
     flex: 1,
     fontSize: 16,
     marginLeft: 5,
-  },
-  addButtonText: {
-    fontSize: 16,
-    fontWeight: "bold",
-    color: "#2196F3",
   },
   saveButtonText: {
     fontSize: 15,

@@ -1,12 +1,14 @@
 import React from "react";
 import { View, TouchableOpacity, Image, StyleSheet } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, useRoute } from "@react-navigation/native";
 import { addFavorite, removeFavorite } from "../../store/redux/bookmark";
 import ContentBox from "../../common/ContentBox";
 
 const SearchResultList = ({ item }) => {
   const dispatch = useDispatch();
+  const route = useRoute();
+  const { searchText } = route.params;
   const favorites = useSelector((state) => state.bookmark.ids);
 
   const isFavorite = favorites.includes(item.shopId);
@@ -18,7 +20,7 @@ const SearchResultList = ({ item }) => {
     } else {
       dispatch(addFavorite({ id: item.shopId }));
     }
-    navigation.navigate("AddBookmarkScreen");
+    navigation.navigate("AddBookmarkScreen", { searchText: searchText });
   };
 
   return (
