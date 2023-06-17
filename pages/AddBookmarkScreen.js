@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   View,
   TouchableOpacity,
@@ -11,7 +11,12 @@ import {
 import { useNavigation, useRoute } from "@react-navigation/native";
 import Header from "../common/Header";
 import BackButton from "../common/BackButton";
-import { addCategory, sendBookmarkData } from "../store/redux/bookmark";
+import {
+  addCategory,
+  sendBookmarkData,
+  resetBookmark,
+  fetchBookmarkData,
+} from "../store/redux/bookmark";
 import { useDispatch, useSelector } from "react-redux";
 import RegistrationModal from "../common/RegistrationModal";
 
@@ -45,23 +50,23 @@ const FavoriteScreen = ({ route }) => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
   const favoriteCategories = useSelector((state) => state.bookmark.categories);
-  const selectedCategory = useSelector(
-    (state) => state.bookmark.selectedCategory
-  );
   const favoriteIds = useSelector((state) => state.bookmark.ids);
-
-  const handleGoBack = () => {
-    navigation.goBack();
-  };
 
   const [newCategory, setNewCategory] = useState("");
   const [showNewCategoryInput, setShowNewCategoryInput] = useState(false);
   const [isModalVisible, setIsModalVisible] = useState(false);
 
+  // 뒤로가기
+  const handleGoBack = () => {
+    navigation.goBack();
+  };
+
+  // 폴더명 추가하는 입력 필드
   const handleAddCategoryPress = () => {
     setShowNewCategoryInput(!showNewCategoryInput);
   };
 
+  //폴더명 저장
   const handleSaveCategory = () => {
     if (newCategory.trim()) {
       dispatch(addCategory(newCategory));
@@ -73,19 +78,25 @@ const FavoriteScreen = ({ route }) => {
   const handleCategoryInputChange = (text) => {
     setNewCategory(text);
   };
+
+  //모달 확인 버튼을 눌렀을 때 이동
   const handleModalConfirm = () => {
     setIsModalVisible(false);
     navigation.navigate("BookmarkScreen");
   };
 
+  //모달 취소 버튼을 눌렀을 때 이동
   const handleModalCancel = () => {
     setIsModalVisible(false);
     navigation.navigate("SearchResult", { searchText: searchText });
   };
 
+  //폴더 클릭시 즐겨찾기 등록
   const handleCategoryPress = (category) => {
     setIsModalVisible(true);
-    dispatch(sendBookmarkData({ ids: favoriteIds, categories: [category] }));
+    dispatch(resetBookmark());
+    dispatch(sendBookmarkData({ ids: favoriteIds, categories: category }));
+    console.log(favoriteIds), console.log(category);
   };
 
   return (
@@ -113,13 +124,14 @@ const FavoriteScreen = ({ route }) => {
               onPress={() => handleCategoryPress(category)}
             />
           ))}
+          {/* 새로운 카테고리 추가 영역 표시 */}
           {showNewCategoryInput ? (
             <View style={styles.inputContainer}>
               <TextInput
                 style={styles.input}
                 value={newCategory}
                 onChangeText={handleCategoryInputChange}
-                placeholder="추가하실 폴더명을 입력해주세요."
+                placeholder="Enter category"
               />
               <TouchableOpacity onPress={handleSaveCategory}>
                 <Text style={styles.saveButtonText}>저장</Text>

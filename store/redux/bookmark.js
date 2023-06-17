@@ -1,6 +1,21 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
+export const fetchBookmarkData = createAsyncThunk(
+  "bookmark/fetchBookmarkData",
+  async () => {
+    try {
+      const url = "http://3.38.33.21:8080/api/bookmarks";
+      const response = await axios.get(url);
+      console.log("GET 요청 성공:", response.data.data);
+      return response.data.data;
+    } catch (error) {
+      console.log("GET 요청 실패:", error);
+      throw error;
+    }
+  }
+);
+
 export const sendBookmarkData = createAsyncThunk(
   "bookmark/sendBookmarkData",
   async ({ ids, categories }) => {
@@ -18,11 +33,12 @@ const bookmarkSlice = createSlice({
   name: "bookmark",
   initialState: {
     ids: [],
-    categories: ["한식", "중식", "베이커리", "일식"],
+    categories: [],
     sendingStatus: "idle",
     error: null,
     bookmarks: [],
     fetchingStatus: "idle",
+    folderNames: [],
   },
   reducers: {
     addFavorite: (state, action) => {
@@ -40,6 +56,11 @@ const bookmarkSlice = createSlice({
     setCategories: (state, action) => {
       state.categories = action.payload;
     },
+    resetBookmark: (state) => {
+      state.ids = [];
+      state.error = null;
+      state.bookmarks = [];
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(sendBookmarkData.fulfilled, (state) => {
@@ -50,10 +71,30 @@ const bookmarkSlice = createSlice({
       state.sendingStatus = "idle";
       state.error = action.error.message;
     });
+    builder.addCase(fetchBookmarkData.pending, (state) => {
+      state.fetchingStatus = "loading";
+      state.error = null;
+    });
+    builder.addCase(fetchBookmarkData.fulfilled, (state, action) => {
+      state.fetchingStatus = "idle";
+      state.bookmarks = action.payload;
+      state.folderNames = action.payload.map((item) => item.folderName);
+      state.categories = [...state.folderNames];
+      state.error = null;
+    });
+    builder.addCase(fetchBookmarkData.rejected, (state, action) => {
+      state.fetchingStatus = "idle";
+      state.error = action.error.message;
+    });
   },
 });
 
-export const { addFavorite, addCategory, setCategories } =
-  bookmarkSlice.actions;
+export const {
+  addFavorite,
+  removeFavorite,
+  addCategory,
+  setCategories,
+  resetBookmark,
+} = bookmarkSlice.actions;
 
 export default bookmarkSlice.reducer;
