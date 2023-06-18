@@ -51,7 +51,11 @@ const bookmarkSlice = createSlice({
       }
     },
     addCategory: (state, action) => {
-      state.categories.push(action.payload);
+      const newCategory = action.payload;
+      if (!state.categories.includes(newCategory)) {
+        state.categories.push(newCategory);
+        state.folderNames = Array.from(new Set(state.categories));
+      }
     },
     setCategories: (state, action) => {
       state.categories = action.payload;
@@ -78,7 +82,10 @@ const bookmarkSlice = createSlice({
     builder.addCase(fetchBookmarkData.fulfilled, (state, action) => {
       state.fetchingStatus = "idle";
       state.bookmarks = action.payload;
-      state.folderNames = action.payload.map((item) => item.folderName);
+      state.folderNames = state.folderNames.concat(
+        action.payload.map((item) => item.folderName)
+      );
+      state.folderNames = Array.from(new Set(state.folderNames));
       state.categories = [...state.folderNames];
       state.error = null;
     });
