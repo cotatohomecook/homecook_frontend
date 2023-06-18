@@ -21,12 +21,18 @@ const BookmarkScreen = () => {
   const dispatch = useDispatch();
   const [selectedFolder, setSelectedFolder] = useState(null);
   const [showCategories, setShowCategories] = useState(true);
+  const [uniqueShopIds, setUniqueShopIds] = useState([]);
 
   const navigation = useNavigation();
 
   useEffect(() => {
     dispatch(fetchBookmarkData());
   }, []);
+
+  useEffect(() => {
+    const uniqueIds = [...new Set(folderData.map((item) => item.shopId))];
+    setUniqueShopIds(uniqueIds);
+  }, [folderData]);
 
   const handleGoBack = () => {
     setSelectedFolder(null);
@@ -95,16 +101,19 @@ const BookmarkScreen = () => {
                 }}
               ></Image>
             </TouchableOpacity>
-            {folderData.map(
-              (item) =>
-                item.folderName === selectedFolder && (
+            {uniqueShopIds.map((shopId) => {
+              const item = folderData.find((item) => item.shopId === shopId);
+              if (item && item.folderName === selectedFolder) {
+                return (
                   <BookmarkListButton
                     key={item.shopId}
                     shopName={item.shopName}
                     imageUrl={item.imageUrl}
-                  ></BookmarkListButton>
-                )
-            )}
+                  />
+                );
+              }
+              return null;
+            })}
           </View>
         )}
       </TouchableOpacity>
