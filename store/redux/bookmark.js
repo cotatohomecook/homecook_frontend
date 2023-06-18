@@ -18,11 +18,13 @@ export const fetchBookmarkData = createAsyncThunk(
 
 export const sendBookmarkData = createAsyncThunk(
   "bookmark/sendBookmarkData",
-  async ({ ids, categories }) => {
+  async ({ ids, categories }, { dispatch }) => {
     try {
       const url = `http://3.38.33.21:8080/api/bookmarks/${ids}/${categories}`;
       await axios.post(url);
       console.log("POST 요청 성공");
+      // 즐겨찾기 데이터를 업데이트하기 위해 fetchBookmarkData 호출
+      dispatch(fetchBookmarkData());
     } catch (error) {
       console.log("POST 요청 실패:", error);
     }
