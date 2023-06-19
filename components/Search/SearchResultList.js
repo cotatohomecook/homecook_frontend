@@ -1,23 +1,47 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { View, TouchableOpacity, Image, StyleSheet } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigation, useRoute } from "@react-navigation/native";
-import { addFavorite, removeFavorite } from "../../store/redux/bookmark";
+import { addFavorite, fetchBookmarkData } from "../../store/redux/bookmark";
 import ContentBox from "../../common/ContentBox";
 
 const SearchResultList = ({ item }) => {
   const dispatch = useDispatch();
   const route = useRoute();
   const { searchText } = route.params;
-  const favorites = useSelector((state) => state.bookmark.ids);
-
-  const isFavorite = favorites.includes(item.shopId);
   const navigation = useNavigation();
+  const [imageUri, setImageUri] = useState(
+    "https://velog.velcdn.com/images/kkaerrung/post/f3e7ba16-f0eb-4be2-9b5c-c3f5660cb647/image.png"
+  );
+
+  useEffect(() => {
+    const fetchAndSetBookmarkData = async () => {
+      try {
+        dispatch(fetchBookmarkData());
+      } catch (error) {
+        console.error("Failed to fetch bookmark data:", error);
+      }
+    };
+
+    fetchAndSetBookmarkData();
+  }, [dispatch]);
+
+  const bookmarkData = useSelector((state) => state.bookmark.bookmarks);
+  const isItemFavorite = bookmarkData.some(
+    (bookmark) => bookmark.shopId === item.shopId
+  );
+
+  useEffect(() => {
+    if (isItemFavorite) {
+      setImageUri(
+        "https://velog.velcdn.com/images/kkaerrung/post/c7ab4139-e04f-4831-a385-a7aebd29bee9/image.png"
+      );
+    }
+  }, [isItemFavorite]);
 
   const handleToggleFavorite = () => {
-    if (isFavorite) {
-      dispatch(removeFavorite({ id: item.shopId }));
-    } else {
+    const isFavorite = isItemFavorite;
+    if (!isFavorite) {
       dispatch(addFavorite({ id: item.shopId }));
     }
     navigation.navigate("AddBookmarkScreen", { searchText: searchText });
@@ -33,7 +57,8 @@ const SearchResultList = ({ item }) => {
         detail={item.bestMenuName}
         rating={item.rating}
         handleToggleFavorite={handleToggleFavorite}
-        isFavorite={isFavorite}
+        isFavorite={isItemFavorite}
+        imageUri={imageUri}
       />
     </View>
   );

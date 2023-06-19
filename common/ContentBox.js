@@ -11,6 +11,7 @@ const ContentBox = ({
   rating,
   handleToggleFavorite,
   isFavorite,
+  imageUri,
 }) => {
   const formattedRating = Number.isInteger(rating) ? `${rating}.0` : rating;
 
@@ -31,11 +32,11 @@ const ContentBox = ({
               <Image
                 style={styles.bookmark}
                 source={{
-                  uri: "https://velog.velcdn.com/images/kkaerrung/post/f3e7ba16-f0eb-4be2-9b5c-c3f5660cb647/image.png",
+                  uri: imageUri,
                   width: 34.7,
                   height: 33,
                 }}
-              ></Image>
+              />
             </TouchableOpacity>
           </View>
         )}
