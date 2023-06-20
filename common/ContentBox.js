@@ -2,7 +2,17 @@ import React from "react";
 import { View, StyleSheet, Image, Text, TouchableOpacity } from "react-native";
 import StarRating from "./StarRating";
 
-const ContentBox = ({ width, height, imgUrl, title, detail, rating }) => {
+const ContentBox = ({
+  width,
+  height,
+  imgUrl,
+  title,
+  detail,
+  rating,
+  handleToggleFavorite,
+  isFavorite,
+  imageUri,
+}) => {
   const formattedRating = Number.isInteger(rating) ? `${rating}.0` : rating;
 
   return (
@@ -18,17 +28,15 @@ const ContentBox = ({ width, height, imgUrl, title, detail, rating }) => {
             <View style={styles.ratingStar}>
               <StarRating rating={rating} width={65} height={12} />
             </View>
-            <TouchableOpacity
-              onPress={() => handleBookmark(item.shopId, item.shopName)}
-            >
+            <TouchableOpacity onPress={handleToggleFavorite}>
               <Image
                 style={styles.bookmark}
                 source={{
-                  uri: "https://velog.velcdn.com/images/kkaerrung/post/f3e7ba16-f0eb-4be2-9b5c-c3f5660cb647/image.png",
+                  uri: imageUri,
                   width: 34.7,
                   height: 33,
                 }}
-              ></Image>
+              />
             </TouchableOpacity>
           </View>
         )}
@@ -43,6 +51,7 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     padding: 10,
     elevation: 3,
+    marginLeft: 12,
     flexDirection: "row",
   },
   textContainer: {

@@ -1,10 +1,54 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { View, TouchableOpacity, Image, StyleSheet } from "react-native";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigation, useRoute } from "@react-navigation/native";
+import { addFavorite, fetchBookmarkData } from "../../store/redux/bookmark";
 import ContentBox from "../../common/ContentBox";
 
 const SearchResultList = ({ item }) => {
+  const dispatch = useDispatch();
+  const route = useRoute();
+  const { searchText } = route.params;
+  const navigation = useNavigation();
+  const [imageUri, setImageUri] = useState(
+    "https://velog.velcdn.com/images/kkaerrung/post/f3e7ba16-f0eb-4be2-9b5c-c3f5660cb647/image.png"
+  );
+
+  useEffect(() => {
+    const fetchAndSetBookmarkData = async () => {
+      try {
+        dispatch(fetchBookmarkData());
+      } catch (error) {
+        console.error("Failed to fetch bookmark data:", error);
+      }
+    };
+
+    fetchAndSetBookmarkData();
+  }, [dispatch]);
+
+  const bookmarkData = useSelector((state) => state.bookmark.bookmarks);
+  const isItemFavorite = bookmarkData.some(
+    (bookmark) => bookmark.shopId === item.shopId
+  );
+
+  useEffect(() => {
+    if (isItemFavorite) {
+      setImageUri(
+        "https://velog.velcdn.com/images/kkaerrung/post/c7ab4139-e04f-4831-a385-a7aebd29bee9/image.png"
+      );
+    }
+  }, [isItemFavorite]);
+
+  const handleToggleFavorite = () => {
+    const isFavorite = isItemFavorite;
+    if (!isFavorite) {
+      dispatch(addFavorite({ id: item.shopId }));
+    }
+    navigation.navigate("AddBookmarkScreen", { searchText: searchText });
+  };
+
   return (
-    <View style={styles.resultbox}>
+    <View>
       <ContentBox
         width={371}
         height={116}
@@ -12,32 +56,12 @@ const SearchResultList = ({ item }) => {
         title={item.shopName}
         detail={item.bestMenuName}
         rating={item.rating}
-      >
-        <TouchableOpacity>
-          <Image
-            style={styles.bookmark}
-            source={{
-              uri: "https://velog.velcdn.com/images/kkaerrung/post/f3e7ba16-f0eb-4be2-9b5c-c3f5660cb647/image.png",
-              width: 34.7,
-              height: 33,
-            }}
-          ></Image>
-        </TouchableOpacity>
-      </ContentBox>
+        handleToggleFavorite={handleToggleFavorite}
+        isFavorite={isItemFavorite}
+        imageUri={imageUri}
+      />
     </View>
   );
 };
 
 export default SearchResultList;
-
-const styles = StyleSheet.create({
-  resultbox: {
-    elevation: 3,
-    marginBottom: 20,
-    alignItems: "center",
-  },
-  bookmark: {
-    left: 120,
-    top: -5,
-  },
-});

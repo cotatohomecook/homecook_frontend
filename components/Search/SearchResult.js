@@ -91,7 +91,7 @@ const SearchResult = ({ route }) => {
       <Header height={139} style={styles.header} />
       <View style={styles.container}>
         <View style={styles.headercontainer}>
-          <BackButton onPress={handleGoBack} />
+          <BackButton onPress={handleGoBack} top={-58} />
           <TouchableOpacity onPress={handleResultPress} style={styles.whitebox}>
             <Text style={styles.searchtext}>{searchText}</Text>
           </TouchableOpacity>
@@ -114,7 +114,9 @@ const SearchResult = ({ route }) => {
         <FlatList
           data={searchResults}
           keyExtractor={(item) => item.shopId}
-          renderItem={({ item }) => <SearchResultList item={item} />}
+          renderItem={({ item }) => (
+            <SearchResultList item={item} searchText={searchText} />
+          )}
           ListEmptyComponent={() => (
             <View style={styles.noresultContainer}>
               <Text style={styles.noresult}>검색 결과가 없습니다.</Text>
@@ -136,7 +138,7 @@ const styles = StyleSheet.create({
     zIndex: 1,
   },
   container: {
-    height: windowHeight - 135,
+    height: windowHeight - 145,
   },
   buttoncontainer: {
     flexDirection: "row",
