@@ -35,8 +35,7 @@ const BookmarkScreen = () => {
   }, [folderData]);
 
   const handleGoBack = () => {
-    setSelectedFolder(null);
-    setShowCategories(true);
+    navigation.navigate("CustomerStartScreen");
   };
 
   const handleCategoryPress = (category) => {

@@ -114,7 +114,9 @@ const SearchResult = ({ route }) => {
         <FlatList
           data={searchResults}
           keyExtractor={(item) => item.shopId}
-          renderItem={({ item }) => <SearchResultList item={item} />}
+          renderItem={({ item }) => (
+            <SearchResultList item={item} searchText={searchText} />
+          )}
           ListEmptyComponent={() => (
             <View style={styles.noresultContainer}>
               <Text style={styles.noresult}>검색 결과가 없습니다.</Text>
