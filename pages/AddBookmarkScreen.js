@@ -51,7 +51,6 @@ const FavoriteScreen = ({ route }) => {
   const dispatch = useDispatch();
   const favoriteCategories = useSelector((state) => state.bookmark.categories);
   const favoriteIds = useSelector((state) => state.bookmark.ids);
-  console.log(favoriteIds);
 
   // / fetchBookmarkData를 디스패치하여 기존 카테고리 목록을 보이게 함
   useEffect(() => {

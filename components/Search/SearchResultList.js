@@ -3,6 +3,7 @@ import { View, TouchableOpacity, Image, StyleSheet } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { addFavorite, fetchBookmarkData } from "../../store/redux/bookmark";
+import { fetchData } from "../../store/redux/shopInfo";
 import ContentBox from "../../common/ContentBox";
 
 const SearchResultList = ({ item }) => {
@@ -47,20 +48,30 @@ const SearchResultList = ({ item }) => {
     navigation.navigate("AddBookmarkScreen", { searchText: searchText });
   };
 
+  const handleShopPress = () => {
+    dispatch(fetchData(item.shopId));
+    navigation.navigate("ShopScreen", {
+      shopId: item.shopId,
+      searchText: searchText,
+    });
+  };
+
   return (
-    <View>
-      <ContentBox
-        width={371}
-        height={116}
-        imgUrl={item.imageUrl}
-        title={item.shopName}
-        detail={item.bestMenuName}
-        rating={item.rating}
-        handleToggleFavorite={handleToggleFavorite}
-        isFavorite={isItemFavorite}
-        imageUri={imageUri}
-      />
-    </View>
+    <TouchableOpacity onPress={handleShopPress}>
+      <View>
+        <ContentBox
+          width={371}
+          height={116}
+          imgUrl={item.imageUrl}
+          title={item.shopName}
+          detail={item.bestMenuName}
+          rating={item.rating}
+          handleToggleFavorite={handleToggleFavorite}
+          isFavorite={isItemFavorite}
+          imageUri={imageUri}
+        />
+      </View>
+    </TouchableOpacity>
   );
 };
 

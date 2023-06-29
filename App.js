@@ -5,6 +5,7 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import BottomTabNavigator from "./navigator/BottomTabNavigator";
 import CustomerMap from "./pages/CustomerMap";
 import SearchScreen from "./navigator/BottomTab/SearchScreen";
+import ShopScreen from "./pages/ShopScreen";
 import { Provider } from "react-redux";
 import store from "./store/redux/store";
 
