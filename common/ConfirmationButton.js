@@ -1,10 +1,10 @@
 import React from "react";
 import { TouchableOpacity, Text, StyleSheet, View } from "react-native";
 
-const ConfirmationButtons = ({ onConfirm, onCancel }) => {
+const ConfirmationButtons = ({ onConfirm, onCancel, width, height }) => {
   return (
     <View style={styles.container}>
-      <View style={styles.buttonContainer}>
+      <View style={[styles.buttonContainer, { width, height }]}>
         <TouchableOpacity style={styles.yesModalbutton} onPress={onConfirm}>
           <Text style={styles.modalButtonText}>예</Text>
         </TouchableOpacity>
