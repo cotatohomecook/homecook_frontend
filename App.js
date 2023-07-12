@@ -6,6 +6,8 @@ import BottomTabNavigator from "./navigator/BottomTabNavigator";
 import CustomerMap from "./pages/CustomerMap";
 import SearchScreen from "./navigator/BottomTab/SearchScreen";
 import ShopScreen from "./pages/ShopScreen";
+import OrderMenuScreen from "./pages/OrderMenuScreen";
+import PaymentScreen from "./pages/PaymentScreen";
 import { Provider } from "react-redux";
 import store from "./store/redux/store";
 
@@ -36,6 +38,21 @@ export default function App() {
               name="SearchScreen"
               component={SearchScreen}
               options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="ShopScreen"
+              component={ShopScreen}
+              option={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="OrderMenuScreen"
+              component={OrderMenuScreen}
+              option={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="PaymentScreen"
+              component={PaymentScreen}
+              option={{ heaerShown: false }}
             />
           </Stack.Navigator>
         </NavigationContainer>

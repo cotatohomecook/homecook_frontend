@@ -11,6 +11,7 @@ import AddBookmarkScreen from "../pages/AddBookmarkScreen";
 import ModalComponent from "../common/ModalComponent";
 import ShopScreen from "../pages/ShopScreen";
 import MenuDetailScreen from "../pages/MenuDetailScreen";
+import OrderMenuScreen from "../pages/OrderMenuScreen";
 import store from "../store/redux/store";
 import { Provider } from "react-redux";
 
@@ -230,6 +231,14 @@ export default function BottomTabNavigator() {
                   }}
                 />
               ),
+              tabBarButton: () => null,
+            }}
+          />
+          <Tab.Screen
+            name={"OrderMenuScreen"}
+            component={OrderMenuScreen}
+            options={{
+              headerShown: false,
               tabBarButton: () => null,
             }}
           />

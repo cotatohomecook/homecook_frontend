@@ -15,6 +15,7 @@ import ShopMenuInfo from "../common/ShopMenuInfo";
 import BackButton from "../common/BackButton";
 import { useNavigation } from "@react-navigation/native";
 import OrderButton from "../common/OrderButton";
+import OrderMenuScreen from "./OrderMenuScreen";
 
 const ShopScreen = () => {
   const navigation = useNavigation();
@@ -31,6 +32,10 @@ const ShopScreen = () => {
 
   const handleGoBack = () => {
     navigation.navigate("SearchResult", { searchText: searchText });
+  };
+
+  const handleOrder = () => {
+    navigation.navigate("OrderMenuScreen");
   };
 
   if (shopInfo === undefined || !shopInfo || !shopInfo.data) {
@@ -91,7 +96,11 @@ const ShopScreen = () => {
             </Text>
           </View>
           <View style={styles.orderButton}>
-            <OrderButton title={"주문하러 가기"} color={"#FFB15F"} />
+            <OrderButton
+              title={"주문하러 가기"}
+              color={"#FFB15F"}
+              onPress={handleOrder}
+            />
           </View>
         </>
       ) : (
