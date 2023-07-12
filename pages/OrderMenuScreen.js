@@ -54,7 +54,7 @@ const OrderMenuScreen = () => {
     };
 
     dispatch(postData(data)).then(() => {
-      navigation.navigate("PaymentScreen");
+      navigation.navigate("PaymentScreen", { totalPrice: totalPrice });
     });
   };
   return (

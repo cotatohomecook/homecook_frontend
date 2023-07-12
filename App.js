@@ -42,17 +42,17 @@ export default function App() {
             <Stack.Screen
               name="ShopScreen"
               component={ShopScreen}
-              option={{ headerShown: false }}
+              options={{ headerShown: false }}
             />
             <Stack.Screen
               name="OrderMenuScreen"
               component={OrderMenuScreen}
-              option={{ headerShown: false }}
+              options={{ headerShown: false }}
             />
             <Stack.Screen
               name="PaymentScreen"
               component={PaymentScreen}
-              option={{ heaerShown: false }}
+              options={{ headerShown: false }}
             />
           </Stack.Navigator>
         </NavigationContainer>
