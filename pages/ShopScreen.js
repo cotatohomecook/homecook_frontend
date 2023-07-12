@@ -36,6 +36,8 @@ const ShopScreen = () => {
   if (shopInfo === undefined || !shopInfo || !shopInfo.data) {
     return <Text>Loading...</Text>;
   }
+  const orderItemCount = shopInfo.cart.length;
+  console.log(shopInfo.cart);
 
   return (
     <>
@@ -79,14 +81,31 @@ const ShopScreen = () => {
           <View style={styles.bottomSpace} />
         </View>
       </ScrollView>
-      <View style={styles.orderGuide}>
-        <Text style={styles.orderGuideText}>
-          내 식탁에 넣어둔 주문이 없어요.
-        </Text>
-      </View>
-      <View style={styles.orderButton}>
-        <OrderButton title={"주문하러 가기"} color={"#C0C0C0"} />
-      </View>
+      {orderItemCount > 0 ? (
+        <>
+          <View style={styles.orderedGuide}>
+            <Text style={styles.orderedGuideText}>
+              내 식탁에 넣어둔 주문이{" "}
+              <Text style={styles.orderItemText}>{orderItemCount}건</Text>{" "}
+              있어요.
+            </Text>
+          </View>
+          <View style={styles.orderButton}>
+            <OrderButton title={"주문하러 가기"} color={"#FFB15F"} />
+          </View>
+        </>
+      ) : (
+        <>
+          <View style={styles.orderGuide}>
+            <Text style={styles.orderGuideText}>
+              내 식탁에 넣어둔 주문이 없어요.
+            </Text>
+          </View>
+          <View style={styles.orderButton}>
+            <OrderButton title={"주문하러 가기"} color={"#C0C0C0"} />
+          </View>
+        </>
+      )}
     </>
   );
 };
@@ -131,6 +150,25 @@ const styles = StyleSheet.create({
   },
   bottomSpace: {
     height: 100,
+  },
+  orderedGuide: {
+    position: "absolute",
+    marginTop: 650,
+    marginLeft: 44,
+    width: 302,
+    height: 26,
+    borderRadius: 4,
+    backgroundColor: "#FFFBA7",
+  },
+  orderedGuideText: {
+    marginTop: 5,
+    fontSize: 12,
+    fontWeight: 600,
+    textAlign: "center",
+    color: "#000000",
+  },
+  orderItemText: {
+    color: "#F16F57",
   },
   orderGuide: {
     position: "absolute",

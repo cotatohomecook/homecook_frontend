@@ -16,12 +16,45 @@ export const fetchData = createAsyncThunk(
   }
 );
 
-// 초기 상태 정의
+export const postData = createAsyncThunk(
+  "shopInfo/postData",
+  async (cartItem) => {
+    try {
+      const url = "http://3.38.33.21:8080/api/orders";
+      const response = await axios.post(url, cartItem);
+      console.log("POST 요청 성공", response.data);
+
+      return response.data;
+    } catch (error) {
+      console.log("POST 요청 실패:", error);
+      throw error;
+    }
+  }
+);
+
+const ADD_TO_CART = "shopInfo/ADD_TO_CART";
+
+export const addToCart = (cartItem) => {
+  return {
+    type: ADD_TO_CART,
+    payload: cartItem,
+  };
+};
+
+export const updateCartItem = (index, updatedQuantity) => {
+  return {
+    type: "shopInfo/UPDATE_CART_ITEM",
+    payload: { index, updatedQuantity },
+  };
+};
+
 const initialState = {
   data: null,
   error: null,
   isLoading: false,
   selectedMenuId: null,
+  quantity: 0,
+  cart: [],
 };
 
 const shopInfoSlice = createSlice({
@@ -30,6 +63,18 @@ const shopInfoSlice = createSlice({
   reducers: {
     setSelectedMenuId: (state, action) => {
       state.selectedMenuId = action.payload;
+    },
+    increaseQuantity: (state) => {
+      state.quantity += 1;
+    },
+    decreaseQuantity: (state) => {
+      if (state.quantity > 0) {
+        state.quantity -= 1;
+      }
+    },
+    updateCartItem: (state, action) => {
+      const { cartItem, index } = action.payload;
+      state.cart[index] = cartItem;
     },
   },
   extraReducers: (builder) => {
@@ -46,6 +91,19 @@ const shopInfoSlice = createSlice({
       .addCase(fetchData.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.error.message;
+      })
+      .addCase("shopInfo/ADD_TO_CART", (state, action) => {
+        const cartItem = action.payload;
+        state.cart.push(cartItem);
+      })
+      .addCase("shopInfo/UPDATE_CART_ITEM", (state, action) => {
+        const { index, updatedQuantity } = action.payload;
+        if (index !== -1) {
+          state.cart[index] = {
+            ...state.cart[index],
+            quantity: state.cart[index].quantity + updatedQuantity,
+          };
+        }
       });
   },
 });
