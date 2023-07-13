@@ -15,7 +15,7 @@ import ShopMenuInfo from "../common/ShopMenuInfo";
 import BackButton from "../common/BackButton";
 import { useNavigation } from "@react-navigation/native";
 import OrderButton from "../common/OrderButton";
-import OrderMenuScreen from "./OrderMenuScreen";
+import { shopInfoActions } from "../store/redux/shopInfo";
 
 const ShopScreen = () => {
   const navigation = useNavigation();
@@ -24,14 +24,17 @@ const ShopScreen = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    console.log("shopId:", shopId);
     dispatch(fetchData(shopId));
+    dispatch(shopInfoActions.setSearchText(searchText));
   }, [dispatch, shopId]);
 
   const shopInfo = useSelector((state) => state.shopInfo);
+  const search = useSelector((state) => state.shopInfo.searchText);
+  console.log(search);
 
   const handleGoBack = () => {
-    navigation.navigate("SearchResult", { searchText: searchText });
+    console.log(search);
+    navigation.navigate("SearchResult", { searchText: search });
   };
 
   const handleOrder = () => {

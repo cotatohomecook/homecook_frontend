@@ -32,11 +32,9 @@ export const postData = createAsyncThunk(
   }
 );
 
-const ADD_TO_CART = "shopInfo/ADD_TO_CART";
-
 export const addToCart = (cartItem) => {
   return {
-    type: ADD_TO_CART,
+    type: "shopInfo/ADD_TO_CART",
     payload: cartItem,
   };
 };
@@ -49,6 +47,7 @@ export const updateCartItem = (index, updatedQuantity) => {
 };
 
 const initialState = {
+  searchText: "",
   data: null,
   error: null,
   isLoading: false,
@@ -75,6 +74,9 @@ const shopInfoSlice = createSlice({
     updateCartItem: (state, action) => {
       const { cartItem, index } = action.payload;
       state.cart[index] = cartItem;
+    },
+    setSearchText: (state, action) => {
+      state.searchText = action.payload;
     },
   },
   extraReducers: (builder) => {
