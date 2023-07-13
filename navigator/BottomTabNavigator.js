@@ -163,17 +163,6 @@ export default function BottomTabNavigator() {
             component={SearchResult}
             options={{
               headerShown: false,
-              tabBarIcon: ({ focused }) => (
-                <Image
-                  source={{
-                    uri: "https://velog.velcdn.com/images/thgus05061/post/d4caa6f3-826b-4fb5-910f-6d34726fd7c4/image.png",
-                  }}
-                  style={{
-                    width: 19,
-                    height: 19,
-                  }}
-                />
-              ),
               tabBarButton: () => null,
             }}
           />
@@ -182,17 +171,6 @@ export default function BottomTabNavigator() {
             component={AddBookmarkScreen}
             options={{
               headerShown: false,
-              tabBarIcon: ({ focused }) => (
-                <Image
-                  source={{
-                    uri: "https://velog.velcdn.com/images/thgus05061/post/d4caa6f3-826b-4fb5-910f-6d34726fd7c4/image.png",
-                  }}
-                  style={{
-                    width: 19,
-                    height: 19,
-                  }}
-                />
-              ),
               tabBarButton: () => null,
             }}
           />
@@ -201,17 +179,6 @@ export default function BottomTabNavigator() {
             component={ShopScreen}
             options={{
               headerShown: false,
-              tabBarIcon: ({ focused }) => (
-                <Image
-                  source={{
-                    uri: "https://velog.velcdn.com/images/thgus05061/post/d4caa6f3-826b-4fb5-910f-6d34726fd7c4/image.png",
-                  }}
-                  style={{
-                    width: 19,
-                    height: 19,
-                  }}
-                />
-              ),
               tabBarButton: () => null,
             }}
           />
@@ -220,17 +187,6 @@ export default function BottomTabNavigator() {
             component={MenuDetailScreen}
             options={{
               headerShown: false,
-              tabBarIcon: ({ focused }) => (
-                <Image
-                  source={{
-                    uri: "https://velog.velcdn.com/images/thgus05061/post/d4caa6f3-826b-4fb5-910f-6d34726fd7c4/image.png",
-                  }}
-                  style={{
-                    width: 19,
-                    height: 19,
-                  }}
-                />
-              ),
               tabBarButton: () => null,
             }}
           />
