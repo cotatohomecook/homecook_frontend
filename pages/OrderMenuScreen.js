@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
@@ -14,15 +14,12 @@ import BackButton from "../common/BackButton";
 import MenuQuantity from "../common/menuQuantity";
 import { useNavigation } from "@react-navigation/native";
 import OrderButton from "../common/OrderButton";
-import { useDispatch } from "react-redux";
-import { setAddress } from "../store/redux/shopInfo";
-import { postData } from "../store/redux/shopInfo";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const OrderMenuScreen = () => {
-  const dispatch = useDispatch();
   const cart = useSelector((state) => state.shopInfo.cart);
-  const address = useSelector((state) => state.shopInfo.address);
   const [inputAddress, setInputAddress] = useState("");
+  const [currentAddress, setCurrentAddress] = useState(null);
 
   const navigation = useNavigation();
   const handleGoBack = () => {
@@ -37,8 +34,17 @@ const OrderMenuScreen = () => {
     setInputAddress(text);
   };
 
-  const handleSaveAddress = () => {
-    dispatch(setAddress(inputAddress));
+  const handleAddCart = () => {
+    navigation.navigate("ShopScreen", { shopId: cart[0].shopId });
+  };
+
+  const handleSaveAddress = async () => {
+    try {
+      await AsyncStorage.setItem("deliveryAddress", inputAddress);
+      setCurrentAddress(inputAddress);
+    } catch (error) {
+      console.log("Failed to save address:", error);
+    }
   };
 
   const handleOrderPress = () => {
@@ -46,17 +52,25 @@ const OrderMenuScreen = () => {
       menuId: item.menuId,
       quantity: item.quantity,
     }));
-
-    const data = {
+    navigation.navigate("PaymentScreen", {
       shopId: cart[0].shopId,
+      totalPrice: totalPrice,
       orderMenus: orderMenus,
-      deliveryAddress: address,
-    };
-
-    dispatch(postData(data)).then(() => {
-      navigation.navigate("PaymentScreen", { totalPrice: totalPrice });
+      deliveryAddress: currentAddress,
     });
   };
+
+  useEffect(() => {
+    const fetchDeliveryAddress = async () => {
+      const savedAddress = await AsyncStorage.getItem("deliveryAddress");
+      if (savedAddress) {
+        setCurrentAddress(savedAddress);
+      }
+    };
+
+    fetchDeliveryAddress();
+  }, []);
+
   return (
     <>
       <Header title={cart[0].shopName} height={114} />
@@ -66,39 +80,59 @@ const OrderMenuScreen = () => {
           <View style={[styles.myTable, { height: myTableHeight }]}>
             <Text style={styles.myTableText}>내 식탁</Text>
             {cart.map((item, index) => (
-              <View key={index} style={styles.menuContainer}>
+              <View style={styles.menuContainer}>
                 <Image
                   style={styles.menuImage}
                   source={{ uri: item.imageUrl, width: 139, height: 139 }}
-                ></Image>
+                />
                 <Image
                   source={{
                     uri: "https://velog.velcdn.com/images/kkaerrung/post/66392ed4-5892-485b-9200-61bca8f4ab79/image.png",
                   }}
                 />
-                <Text style={styles.menuName}>{item.menuName}</Text>
-                <View style={styles.description}>
-                  <View style={styles.separation} />
-                  <View style={styles.quantityContainer}>
-                    <Text style={styles.quantityText}>수량: </Text>
-                    <MenuQuantity quantity={item.quantity}></MenuQuantity>
+                <View key={item.menuId} style={styles.menuContainer}>
+                  <Text style={styles.menuName}>{item.menuName}</Text>
+                  <View style={styles.description}>
+                    <View style={styles.separation} />
+                    <View style={styles.quantityContainer}>
+                      <Text style={styles.quantityText}>수량: </Text>
+                      <MenuQuantity quantity={item.quantity} />
+                    </View>
+                    <View style={styles.itemPriceContainer}>
+                      <Text style={styles.itemPrice}>가격:</Text>
+                      <Text style={styles.itemPriceText}>
+                        {itemPrice[index]} 원
+                      </Text>
+                    </View>
                   </View>
-                  <Text style={styles.price}>가격: {itemPrice[index]}원</Text>
                 </View>
               </View>
             ))}
           </View>
+          <TouchableOpacity onPress={handleAddCart}>
+            <Image
+              style={styles.addCartButton}
+              source={{
+                uri: "https://velog.velcdn.com/images/kkaerrung/post/fb09c0d3-179f-43da-b5bf-dde85b4be734/image.png",
+                width: 65,
+                height: 65,
+              }}
+            ></Image>
+          </TouchableOpacity>
           <View style={styles.priceBox}>
             <Text style={styles.priceText}>총금액: </Text>
             <Text style={styles.totalPrice}>{totalPrice} 원</Text>
             <View style={styles.separationLine} />
           </View>
           <View style={styles.delivery}>
-            <Text style={styles.deliveryText}>배달받을 주소 입력하기</Text>
-            {address === null ? (
+            <View style={{ flexDirection: "row" }}>
+              <Text style={styles.deliveryText}>배달받을 주소 입력하기</Text>
+            </View>
+
+            {currentAddress == null ? (
               <View style={styles.location}>
                 <Text style={styles.locationText}>
-                  주소를 입력해주세요.
+                  주소를 입력해주세요{"  "}
                   <Image
                     source={{
                       uri: "https://velog.velcdn.com/images/kkaerrung/post/d51c9b99-6f02-4ff6-831c-7925a8d78dad/image.png",
@@ -125,7 +159,7 @@ const OrderMenuScreen = () => {
             ) : (
               <View style={styles.location}>
                 <Text style={styles.locationText}>
-                  {address}
+                  {currentAddress}{" "}
                   <Image
                     source={{
                       uri: "https://velog.velcdn.com/images/kkaerrung/post/d51c9b99-6f02-4ff6-831c-7925a8d78dad/image.png",
@@ -137,11 +171,17 @@ const OrderMenuScreen = () => {
                 <View style={styles.locationInput}>
                   <TextInput
                     style={styles.textInput}
-                    placeholder="상세주소 입력하기"
+                    placeholder={"수정할 주소를 입력해주세요"}
                     value={inputAddress}
                     onChangeText={handleAddressChange}
                   />
                 </View>
+                <TouchableOpacity
+                  style={styles.saveButton}
+                  onPress={handleSaveAddress}
+                >
+                  <Text style={styles.saveText}>수정하기</Text>
+                </TouchableOpacity>
               </View>
             )}
           </View>
@@ -150,7 +190,7 @@ const OrderMenuScreen = () => {
               title={"주문 완료하기"}
               color={"#FFB15F"}
               onPress={handleOrderPress}
-            ></OrderButton>
+            />
           </View>
         </ScrollView>
       </View>
@@ -200,8 +240,8 @@ const styles = StyleSheet.create({
   separation: {
     width: 160,
     height: 1,
-    marginLeft: -55,
-    marginTop: -15,
+    marginLeft: -100,
+    marginTop: 5,
     backgroundColor: "#000000",
     alignItems: "center",
   },
@@ -214,22 +254,33 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     left: -50,
+    marginTop: 10,
   },
   quantityText: {
     textAlign: "center",
     fontSize: 14,
     fontWeight: 500,
     marginRight: 10,
+    marginTop: 10,
   },
-  price: {
-    textAlign: "center",
+  itemPriceContainer: { flexDirection: "row", marginTop: 10 },
+  itemPrice: {
     fontSize: 14,
     fontWeight: 500,
-    left: -95,
-    top: 20,
+    marginLeft: -110,
+  },
+  itemPriceText: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    marginLeft: 70,
+  },
+  addCartButton: {
+    marginLeft: 150,
+    marginTop: -15,
   },
   secondContainer: {
     flex: 1,
+    marginLeft: 10,
   },
   priceBox: {
     width: 369,
@@ -237,6 +288,7 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     backgroundColor: "#FFFFFF",
     marginBottom: 13,
+    marginTop: 15,
   },
   priceText: {
     marginTop: 14,
@@ -269,26 +321,34 @@ const styles = StyleSheet.create({
   },
   location: {
     width: 333,
-    height: 132,
+    height: 170,
     marginLeft: 17,
     marginTop: 9,
     borderRadius: 10,
     backgroundColor: "#E9E9E9",
   },
   locationText: {
+    width: 280,
     marginTop: 20,
     marginLeft: 19,
     color: "#000000",
-    fontSize: 15,
+    fontSize: 13,
     fontWeight: 500,
   },
   textInput: {
+    width: 260,
     marginLeft: 20,
     marginTop: 5,
   },
+  locationButtonText: {
+    fontSize: 9,
+    fontWeight: 600,
+    marginLeft: 10,
+    marginTop: 2,
+  },
   locationInput: {
     width: 307,
-    height: 66,
+    height: 80,
     marginTop: 10,
     marginLeft: 13,
     borderRadius: 14,

@@ -41,15 +41,6 @@ export const addToCart = (cartItem) => {
   };
 };
 
-const SET_ADDRESS = "shopInfo/SET_ADDRESS";
-
-export const setAddress = (address) => {
-  return {
-    type: SET_ADDRESS,
-    payload: address,
-  };
-};
-
 export const updateCartItem = (index, updatedQuantity) => {
   return {
     type: "shopInfo/UPDATE_CART_ITEM",
@@ -64,7 +55,6 @@ const initialState = {
   selectedMenuId: null,
   quantity: 0,
   cart: [],
-  address: null,
 };
 
 const shopInfoSlice = createSlice({
@@ -81,9 +71,6 @@ const shopInfoSlice = createSlice({
       if (state.quantity > 0) {
         state.quantity -= 1;
       }
-    },
-    setAddress: (state, action) => {
-      state.address = action.payload;
     },
     updateCartItem: (state, action) => {
       const { cartItem, index } = action.payload;
@@ -108,9 +95,6 @@ const shopInfoSlice = createSlice({
       .addCase("shopInfo/ADD_TO_CART", (state, action) => {
         const cartItem = action.payload;
         state.cart.push(cartItem);
-      })
-      .addCase("shopInfo/SET_ADDRESS", (state, action) => {
-        state.address = action.payload;
       })
       .addCase("shopInfo/UPDATE_CART_ITEM", (state, action) => {
         const { index, updatedQuantity } = action.payload;

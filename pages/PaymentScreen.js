@@ -85,10 +85,10 @@ const PaymentScreen = () => {
           </TouchableOpacity>
           <View style={styles.totalPriceContainer}>
             <Text style={styles.totalPriceText}>총 금액</Text>
-            <Text style={styles.totalPrice}>{totalPrice}원</Text>
+            <Text style={styles.totalPrice}>{totalPrice} 원</Text>
             <View style={styles.seperation} />
           </View>
-          <View stlye={styles.orderButton}>
+          <View style={{ marginLeft: -10 }}>
             <OrderButton
               title={"주문 완료하기"}
               color={"#FFB15F"}
@@ -106,8 +106,6 @@ const PaymentScreen = () => {
         text={"다음에 주문하시겠습니까?"}
         onConfirm={onConfirm}
         onCancel={onCancel}
-        width={220}
-        height={32}
         modalVisible={confirmModalVisible}
       />
     </>
@@ -215,7 +213,7 @@ const styles = StyleSheet.create({
   orderButton: {
     justifyContent: "center",
     alignItems: "center",
-    marginLeft: -10,
+    marginLeft: -20,
   },
 });
 
