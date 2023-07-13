@@ -80,7 +80,7 @@ const OrderMenuScreen = () => {
           <View style={[styles.myTable, { height: myTableHeight }]}>
             <Text style={styles.myTableText}>내 식탁</Text>
             {cart.map((item, index) => (
-              <View style={styles.menuContainer}>
+              <View key={item.menuId} style={styles.menuContainer}>
                 <Image
                   style={styles.menuImage}
                   source={{ uri: item.imageUrl, width: 139, height: 139 }}
@@ -90,7 +90,7 @@ const OrderMenuScreen = () => {
                     uri: "https://velog.velcdn.com/images/kkaerrung/post/66392ed4-5892-485b-9200-61bca8f4ab79/image.png",
                   }}
                 />
-                <View key={item.menuId} style={styles.menuContainer}>
+                <View style={styles.menuContainer}>
                   <Text style={styles.menuName}>{item.menuName}</Text>
                   <View style={styles.description}>
                     <View style={styles.separation} />
@@ -309,7 +309,7 @@ const styles = StyleSheet.create({
   },
   delivery: {
     width: 369,
-    height: 189,
+    height: 210,
     borderRadius: 20,
     backgroundColor: "#FFFFFF",
   },
@@ -321,7 +321,7 @@ const styles = StyleSheet.create({
   },
   location: {
     width: 333,
-    height: 170,
+    height: 150,
     marginLeft: 17,
     marginTop: 9,
     borderRadius: 10,
@@ -329,10 +329,10 @@ const styles = StyleSheet.create({
   },
   locationText: {
     width: 280,
-    marginTop: 20,
+    marginTop: 15,
     marginLeft: 19,
     color: "#000000",
-    fontSize: 13,
+    fontSize: 15,
     fontWeight: 500,
   },
   textInput: {

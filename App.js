@@ -40,16 +40,6 @@ export default function App() {
               options={{ headerShown: false }}
             />
             <Stack.Screen
-              name="ShopScreen"
-              component={ShopScreen}
-              options={{ headerShown: false }}
-            />
-            <Stack.Screen
-              name="OrderMenuScreen"
-              component={OrderMenuScreen}
-              options={{ headerShown: false }}
-            />
-            <Stack.Screen
               name="PaymentScreen"
               component={PaymentScreen}
               options={{ headerShown: false }}
