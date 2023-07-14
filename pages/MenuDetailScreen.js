@@ -29,7 +29,6 @@ const MenuDetailScreen = () => {
 
   const { shopId, shopName, menuName, imageUrl, description, price, menuId } =
     route.params;
-
   const handleIncreaseQuantity = () => {
     dispatch(shopInfoActions.increaseQuantity());
   };
@@ -62,11 +61,11 @@ const MenuDetailScreen = () => {
       dispatch(addToCart(cartItem));
     }
 
-    navigation.navigate("ShopScreen", { shopId: shopId });
+    navigation.navigate("ShopScreen", { shopId: shopId, shopName: shopName });
   };
 
   const handleGoBack = () => {
-    navigation.navigate("ShopScreen", { shopId: shopId });
+    navigation.navigate("ShopScreen", { shopId: shopId, shopName: shopName });
   };
 
   return (

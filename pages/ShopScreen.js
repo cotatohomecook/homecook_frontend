@@ -20,7 +20,7 @@ import { shopInfoActions } from "../store/redux/shopInfo";
 const ShopScreen = () => {
   const navigation = useNavigation();
   const route = useRoute();
-  const { shopId, searchText } = route.params;
+  const { shopId, searchText, shopName } = route.params;
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -34,11 +34,18 @@ const ShopScreen = () => {
 
   const handleGoBack = () => {
     console.log(search);
-    navigation.navigate("SearchResult", { searchText: search });
+    navigation.navigate("SearchResult", {
+      searchText: search,
+      shopName: shopName,
+      shopId: shopId,
+    });
   };
 
   const handleOrder = () => {
-    navigation.navigate("OrderMenuScreen");
+    navigation.navigate("OrderMenuScreen", {
+      shopName: shopName,
+      shopId: shopId,
+    });
   };
 
   if (shopInfo === undefined || !shopInfo || !shopInfo.data) {

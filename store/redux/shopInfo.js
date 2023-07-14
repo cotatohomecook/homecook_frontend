@@ -78,6 +78,10 @@ const shopInfoSlice = createSlice({
     setSearchText: (state, action) => {
       state.searchText = action.payload;
     },
+    removeFromCart: (state, action) => {
+      const index = action.payload;
+      state.cart.splice(index, 1);
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -101,10 +105,15 @@ const shopInfoSlice = createSlice({
       .addCase("shopInfo/UPDATE_CART_ITEM", (state, action) => {
         const { index, updatedQuantity } = action.payload;
         if (index !== -1) {
-          state.cart[index] = {
-            ...state.cart[index],
-            quantity: state.cart[index].quantity + updatedQuantity,
-          };
+          const currentQuantity = state.cart[index].quantity;
+          const newQuantity = currentQuantity + updatedQuantity;
+
+          if (newQuantity >= 1) {
+            state.cart[index] = {
+              ...state.cart[index],
+              quantity: newQuantity,
+            };
+          }
         }
       });
   },

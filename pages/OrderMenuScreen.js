@@ -9,33 +9,39 @@ import {
   TouchableOpacity,
 } from "react-native";
 import { useSelector } from "react-redux";
+import { useRoute } from "@react-navigation/native";
 import Header from "../common/Header";
 import BackButton from "../common/BackButton";
 import MenuQuantity from "../common/menuQuantity";
 import { useNavigation } from "@react-navigation/native";
 import OrderButton from "../common/OrderButton";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useDispatch } from "react-redux";
+import { updateCartItem, shopInfoActions } from "../store/redux/shopInfo";
 
 const OrderMenuScreen = () => {
+  const dispatch = useDispatch();
+  const route = useRoute();
+  const { shopName, shopId } = route.params;
+  console.log(shopName);
   const cart = useSelector((state) => state.shopInfo.cart);
+  const itemPrice = cart.map((item) => item.price * item.quantity);
+  const totalPrice = itemPrice.reduce((sum, price) => sum + price, 0);
+  const myTableHeight = cart.length * 180 + 60;
   const [inputAddress, setInputAddress] = useState("");
   const [currentAddress, setCurrentAddress] = useState(null);
 
   const navigation = useNavigation();
   const handleGoBack = () => {
-    navigation.navigate("ShopScreen", { shopId: cart[0].shopId });
+    navigation.navigate("ShopScreen", { shopId: shopId });
   };
-
-  const itemPrice = cart.map((item) => item.price * item.quantity);
-  const totalPrice = itemPrice.reduce((sum, price) => sum + price, 0);
-  const myTableHeight = cart.length * 180 + 60;
 
   const handleAddressChange = (text) => {
     setInputAddress(text);
   };
 
   const handleAddCart = () => {
-    navigation.navigate("ShopScreen", { shopId: cart[0].shopId });
+    navigation.navigate("ShopScreen", { shopId: shopId });
   };
 
   const handleSaveAddress = async () => {
@@ -53,11 +59,26 @@ const OrderMenuScreen = () => {
       quantity: item.quantity,
     }));
     navigation.navigate("PaymentScreen", {
-      shopId: cart[0].shopId,
+      shopId: shopId,
       totalPrice: totalPrice,
       orderMenus: orderMenus,
       deliveryAddress: currentAddress,
     });
+  };
+
+  const handleOrderIncrease = (index) => {
+    dispatch(updateCartItem(index, 1));
+  };
+
+  const handleOrderDecrease = (index) => {
+    const existingItem = cart[index];
+    const updatedQuantity = existingItem.quantity - 1;
+    console.log(updateCartItem);
+    if (updatedQuantity > 0) {
+      dispatch(updateCartItem(index, -1));
+    } else {
+      dispatch(shopInfoActions.removeFromCart(index));
+    }
   };
 
   useEffect(() => {
@@ -73,7 +94,7 @@ const OrderMenuScreen = () => {
 
   return (
     <>
-      <Header title={cart[0].shopName} height={114} />
+      <Header title={shopName} height={114} />
       <BackButton top={-45} onPress={handleGoBack} />
       <View style={styles.container}>
         <ScrollView>
@@ -96,7 +117,11 @@ const OrderMenuScreen = () => {
                     <View style={styles.separation} />
                     <View style={styles.quantityContainer}>
                       <Text style={styles.quantityText}>수량: </Text>
-                      <MenuQuantity quantity={item.quantity} />
+                      <MenuQuantity
+                        quantity={item.quantity}
+                        onIncrease={() => handleOrderIncrease(index)}
+                        onDecrease={() => handleOrderDecrease(index)}
+                      />
                     </View>
                     <View style={styles.itemPriceContainer}>
                       <Text style={styles.itemPrice}>가격:</Text>
