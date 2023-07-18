@@ -5,6 +5,9 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import BottomTabNavigator from "./navigator/BottomTabNavigator";
 import CustomerMap from "./pages/CustomerMap";
 import SearchScreen from "./navigator/BottomTab/SearchScreen";
+import ShopScreen from "./pages/ShopScreen";
+import OrderMenuScreen from "./pages/OrderMenuScreen";
+import PaymentScreen from "./pages/PaymentScreen";
 import { Provider } from "react-redux";
 import store from "./store/redux/store";
 
@@ -34,6 +37,11 @@ export default function App() {
             <Stack.Screen
               name="SearchScreen"
               component={SearchScreen}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="PaymentScreen"
+              component={PaymentScreen}
               options={{ headerShown: false }}
             />
           </Stack.Navigator>

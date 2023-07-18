@@ -14,8 +14,8 @@ const BookmarkListButton = ({ key, shopName, imageUrl }) => {
 
 const styles = StyleSheet.create({
   borderBox: {
-    width: 327,
-    height: 127,
+    width: 302,
+    height: 142,
     top: 9,
     background: "#FFFFFF",
     borderRadius: 10,
