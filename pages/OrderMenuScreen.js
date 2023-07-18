@@ -22,8 +22,7 @@ import { updateCartItem, shopInfoActions } from "../store/redux/shopInfo";
 const OrderMenuScreen = () => {
   const dispatch = useDispatch();
   const route = useRoute();
-  const { shopName, shopId } = route.params;
-  console.log(shopName);
+  const { shopId } = route.params;
   const cart = useSelector((state) => state.shopInfo.cart);
   const itemPrice = cart.map((item) => item.price * item.quantity);
   const totalPrice = itemPrice.reduce((sum, price) => sum + price, 0);
@@ -94,7 +93,7 @@ const OrderMenuScreen = () => {
 
   return (
     <>
-      <Header title={shopName} height={114} />
+      <Header title={cart[0].shopName} height={114} />
       <BackButton top={-45} onPress={handleGoBack} />
       <View style={styles.container}>
         <ScrollView>

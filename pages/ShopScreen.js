@@ -62,7 +62,7 @@ const ShopScreen = () => {
         <View>
           <View style={styles.container}>
             <Image
-              source={{ uri: shopInfo.data.imageUrl }}
+              source={{ uri: shopInfo.data.shopImage }}
               style={{
                 width: 324,
                 height: 299,
