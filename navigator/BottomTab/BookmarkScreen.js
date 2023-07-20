@@ -50,7 +50,7 @@ const BookmarkScreen = () => {
     const selectedFolderData = folderData.filter(
       (item) => item.folderName === category
     );
-    setSelectedFolder(selectedFolderData.length > 0 ? category : null);
+    setSelectedFolder(category);
     setShowCategories(false);
   };
 

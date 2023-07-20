@@ -46,7 +46,7 @@ const FavoriteCategoryButton = ({ title, onPress }) => {
 };
 
 const FavoriteScreen = ({ route }) => {
-  const searchText = route.params && route.params.searchText;
+  const { searchText } = route.params;
   const navigation = useNavigation();
   const dispatch = useDispatch();
   const favoriteCategories = useSelector((state) => state.bookmark.categories);
@@ -63,7 +63,7 @@ const FavoriteScreen = ({ route }) => {
 
   // 뒤로가기
   const handleGoBack = () => {
-    navigation.goBack();
+    navigation.navigate("SearchResult", { searchText: searchText });
   };
 
   // 폴더명 추가하는 입력 필드
@@ -110,7 +110,7 @@ const FavoriteScreen = ({ route }) => {
       contentContainerStyle={styles.contentContainer}
       keyboardShouldPersistTaps="handled"
     >
-      <TouchableOpacity activeOpacity={0.8} style={styles.screen}>
+      <View activeOpacity={0.8} style={styles.screen}>
         <Header height={114} title={"즐겨찾기"} />
         <BackButton onPress={handleGoBack} top={-45} />
         <Image
@@ -155,7 +155,7 @@ const FavoriteScreen = ({ route }) => {
             </TouchableOpacity>
           )}
         </View>
-      </TouchableOpacity>
+      </View>
       <RegistrationModal
         visible={isModalVisible}
         onConfirm={handleModalConfirm}

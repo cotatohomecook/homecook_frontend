@@ -38,10 +38,19 @@ const SearchResultList = ({ item }) => {
 
   const handleToggleFavorite = () => {
     const isFavorite = isItemFavorite;
-    if (!isFavorite) {
-      dispatch(addFavorite({ id: item.shopId }));
-      navigation.navigate("AddBookmarkScreen", { searchText: searchText });
-    }
+    !isFavorite
+      ? (dispatch(addFavorite({ id: item.shopId })),
+        navigation.navigate("AddBookmarkScreen", { searchText: searchText }))
+      : (() => {
+          const indexToDelete = bookmarkData.findIndex(
+            (bookmark) => bookmark.shopId === item.shopId
+          );
+
+          if (indexToDelete !== -1) {
+            const bookmarkIdToDelete = bookmarkData[indexToDelete].bookmarkId;
+            dispatch(deleteBookmarkFile({ ids: [bookmarkIdToDelete] }));
+          }
+        })();
   };
 
   const handleShopPress = () => {

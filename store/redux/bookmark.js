@@ -43,6 +43,20 @@ export const deleteBookmarkFolder = createAsyncThunk(
   }
 );
 
+export const deleteBookmarkFile = createAsyncThunk(
+  "bookmark/deleteBookmarkFile",
+  async ({ ids }, { dispatch }) => {
+    try {
+      const url = `http://3.38.33.21:8080/api/bookmarks/${ids}`;
+      await axios.delete(url);
+      console.log("DELETE 요청 성공");
+      await dispatch(fetchBookmarkData());
+    } catch (error) {
+      console.log("DELETE 요청 실패:", error);
+    }
+  }
+);
+
 const bookmarkSlice = createSlice({
   name: "bookmark",
   initialState: {
