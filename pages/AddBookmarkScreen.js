@@ -136,7 +136,7 @@ const FavoriteScreen = ({ route }) => {
                 style={styles.input}
                 value={newCategory}
                 onChangeText={handleCategoryInputChange}
-                placeholder="Enter category"
+                placeholder="폴더명을 입력해주세요"
               />
               <TouchableOpacity onPress={handleSaveCategory}>
                 <Text style={styles.saveButtonText}>저장</Text>
