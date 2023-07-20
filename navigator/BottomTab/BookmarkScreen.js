@@ -23,6 +23,7 @@ const BookmarkScreen = () => {
   const [selectedFolder, setSelectedFolder] = useState(null);
   const [showCategories, setShowCategories] = useState(true);
   const [uniqueShopIds, setUniqueShopIds] = useState([]);
+  const [isChecked, setIsChecked] = useState(false);
 
   const navigation = useNavigation();
 
@@ -36,7 +37,13 @@ const BookmarkScreen = () => {
   }, [folderData]);
 
   const handleGoBack = () => {
+    setShowCategories(true);
+    setIsChecked(false);
     navigation.navigate("CustomerStartScreen");
+  };
+
+  const handleBackToFolder = () => {
+    setShowCategories(true);
   };
 
   const handleCategoryPress = (category) => {
@@ -45,6 +52,14 @@ const BookmarkScreen = () => {
     );
     setSelectedFolder(selectedFolderData.length > 0 ? category : null);
     setShowCategories(false);
+  };
+
+  const handleDeleteFolder = () => {
+    setIsChecked((prevIsChecked) => !prevIsChecked);
+  };
+
+  const handleCancel = () => {
+    setIsChecked(false);
   };
 
   return (
@@ -74,10 +89,22 @@ const BookmarkScreen = () => {
                     title={category}
                     onPress={() => handleCategoryPress(category)}
                     style={styles.button}
+                    isChecked={isChecked}
+                    handleCancel={handleCancel}
                   >
                     <Text style={styles.buttonText}>{category}</Text>
                   </FavoriteCategoryButton>
                 ))}
+              <TouchableOpacity onPress={handleDeleteFolder}>
+                <Image
+                  style={{ marginTop: 30 }}
+                  source={{
+                    uri: "https://velog.velcdn.com/images/kkaerrung/post/4fd871d2-01cb-49e9-b27f-d3448d4dbc23/image.png",
+                    width: 69,
+                    height: 69,
+                  }}
+                ></Image>
+              </TouchableOpacity>
             </View>
           ) : (
             <View style={styles.selectedFolderContainer}>
@@ -92,7 +119,7 @@ const BookmarkScreen = () => {
                 ></Image>
                 <Text style={styles.selectedFolderText}>{selectedFolder}</Text>
               </View>
-              <TouchableOpacity onPress={handleGoBack}>
+              <TouchableOpacity onPress={handleBackToFolder}>
                 <Image
                   style={{ marginTop: 9 }}
                   source={{
@@ -110,6 +137,7 @@ const BookmarkScreen = () => {
                       key={item.shopId}
                       shopName={item.shopName}
                       imageUrl={item.imageUrl}
+                      isChecked={isChecked}
                     />
                   );
                 }

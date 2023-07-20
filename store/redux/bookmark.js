@@ -29,6 +29,20 @@ export const sendBookmarkData = createAsyncThunk(
   }
 );
 
+export const deleteBookmarkFolder = createAsyncThunk(
+  "bookmark/deleteBookmarkData",
+  async ({ folderName }, { dispatch }) => {
+    try {
+      const url = `http://3.38.33.21:8080/api/bookmarks/folder/${folderName}`;
+      await axios.delete(url);
+      console.log("DELETE 요청 성공");
+      await dispatch(fetchBookmarkData());
+    } catch (error) {
+      console.log("DELETE 요청 실패:", error);
+    }
+  }
+);
+
 const bookmarkSlice = createSlice({
   name: "bookmark",
   initialState: {
@@ -67,6 +81,12 @@ const bookmarkSlice = createSlice({
       state.error = null;
       state.bookmarks = [];
     },
+    deleteCategory: (state, action) => {
+      const folderName = action.payload;
+      state.folderNames = state.folderNames.filter(
+        (name) => name !== folderName
+      );
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(sendBookmarkData.fulfilled, (state) => {
@@ -104,6 +124,7 @@ export const {
   addCategory,
   setCategories,
   resetBookmark,
+  deleteCategory,
 } = bookmarkSlice.actions;
 
 export default bookmarkSlice.reducer;
