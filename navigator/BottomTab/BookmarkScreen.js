@@ -134,7 +134,7 @@ const BookmarkScreen = () => {
                 if (item && item.folderName === selectedFolder) {
                   return (
                     <BookmarkListButton
-                      key={item.shopId}
+                      shopId={item.shopId}
                       shopName={item.shopName}
                       imageUrl={item.imageUrl}
                       isChecked={isChecked}
