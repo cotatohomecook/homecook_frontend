@@ -6,7 +6,6 @@ import {
   StyleSheet,
   Image,
   ScrollView,
-  Touchable,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import Header from "../../common/Header";
@@ -134,6 +133,7 @@ const BookmarkScreen = () => {
                 if (item && item.folderName === selectedFolder) {
                   return (
                     <BookmarkListButton
+                      key={item.shopId}
                       shopId={item.shopId}
                       shopName={item.shopName}
                       imageUrl={item.imageUrl}
