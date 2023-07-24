@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { TouchableOpacity, View, Image, Text, StyleSheet } from "react-native";
 import { useDispatch } from "react-redux";
-import { deleteBookmarkFolder, deleteCategory } from "../store/redux/bookmark";
-import ConfirmModal from "./ConfirmModal";
+import { deleteBookmarkFile, deleteCategory } from "../../store/redux/bookmark";
+import ConfirmModal from "../../common/ConfirmModal";
 
 const FavoriteCategoryButton = ({
   title,

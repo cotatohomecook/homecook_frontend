@@ -12,8 +12,8 @@ import Header from "../../common/Header";
 import BackButton from "../../common/BackButton";
 import { useSelector, useDispatch } from "react-redux";
 import { fetchBookmarkData } from "../../store/redux/bookmark";
-import FavoriteCategoryButton from "../../common/FavoriteCategoryButton";
-import BookmarkListButton from "../../common/BookmarkListButton";
+import FavoriteCategoryButton from "../../components/Bookmark/FavoriteCategoryButton";
+import BookmarkListButton from "../../components/Bookmark/BookmarkListButton";
 
 const BookmarkScreen = () => {
   const folderNames = useSelector((state) => state.bookmark.folderNames);
