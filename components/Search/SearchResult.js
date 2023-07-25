@@ -22,7 +22,6 @@ const SearchResult = ({ route }) => {
   const { searchText, searchType } = route.params;
   const dispatch = useDispatch();
   const [modalVisible, setModalVisible] = useState(false);
-  const [orderByDistance, setOrderByDistance] = useState(false);
   const [orderBy, setOrderBy] = useState("distance");
   const searchResults = useSelector(
     (state) => state.searchResult.searchResults
@@ -38,17 +37,8 @@ const SearchResult = ({ route }) => {
     setModalVisible(false);
   };
 
-  const toggleOrderByDistance = () => {
-    setOrderByDistance(!orderByDistance);
-  };
-
   const handleGoBack = () => {
     navigation.goBack();
-  };
-
-  const handleDefaultSorted = () => {
-    setOrderBy("distance");
-    setOrderByDistance(false);
   };
 
   useEffect(() => {
@@ -84,15 +74,17 @@ const SearchResult = ({ route }) => {
           <SortButton
             label={"거리순"}
             onPress={() => setOrderBy("distance")}
-            active={orderByDistance}
+            active={orderBy === "distance"}
           ></SortButton>
           <SortButton
             label={"주문수"}
             onPress={() => setOrderBy("orderCount")}
+            active={orderBy === "orderCount"}
           ></SortButton>
           <SortButton
             label={"리뷰순"}
             onPress={() => setOrderBy("reviewCount")}
+            active={orderBy === "reviewCount"}
           ></SortButton>
         </View>
         <FlatList
