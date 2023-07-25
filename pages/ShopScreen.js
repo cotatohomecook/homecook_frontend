@@ -30,15 +30,16 @@ const ShopScreen = () => {
 
   const shopInfo = useSelector((state) => state.shopInfo);
   const search = useSelector((state) => state.shopInfo.searchText);
-  console.log(search);
 
   const handleGoBack = () => {
     console.log(search);
-    navigation.navigate("SearchResult", {
-      searchText: search,
-      shopName: shopName,
-      shopId: shopId,
-    });
+    search
+      ? navigation.navigate("SearchResult", {
+          searchText: search,
+          shopName: shopName,
+          shopId: shopId,
+        })
+      : navigation.navigate("BookmarkScreen");
   };
 
   const handleOrder = () => {
@@ -52,7 +53,6 @@ const ShopScreen = () => {
     return <Text>Loading...</Text>;
   }
   const orderItemCount = shopInfo.cart.length;
-  console.log(shopInfo.cart);
 
   return (
     <>
