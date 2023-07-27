@@ -23,7 +23,7 @@ import {
 import { searchActions } from "../../store/redux/searchResult";
 
 const SearchResult = ({ route }) => {
-  const { searchText, searchType } = route.params;
+  const { searchText } = route.params;
   const dispatch = useDispatch();
   const [modalVisible, setModalVisible] = useState(false);
   const [orderBy, setOrderBy] = useState("distance");
@@ -33,6 +33,7 @@ const SearchResult = ({ route }) => {
   const loading = useSelector((state) => state.searchResult.loading);
   const isLastPage = useSelector((state) => state.searchResult.isLastPage);
   const currentPage = useSelector((state) => state.searchResult.currentPage);
+  const searchType = useSelector((state) => state.searchResult.searchType);
   const navigation = useNavigation();
 
   const handleResultPress = () => {

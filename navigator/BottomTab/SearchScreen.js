@@ -11,13 +11,15 @@ import {
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import DropDownPicker from "react-native-dropdown-picker";
 import { useNavigation } from "@react-navigation/native";
+import { useDispatch } from "react-redux";
+import { searchActions } from "../../store/redux/searchResult";
 
 const SearchScreen = ({ closeModal }) => {
   const navigation = useNavigation();
+  const dispatch = useDispatch();
   const [searchText, setSearchText] = useState("");
   const [searchHistory, setSearchHistory] = useState([]);
-  const [searchType, setSearchType] = useState("상호명"); // 기본값 설정
-
+  const [searchType, setSearchType] = useState("상호명");
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState("상호명");
   const [items, setItems] = useState([
@@ -78,7 +80,8 @@ const SearchScreen = ({ closeModal }) => {
     try {
       saveSearchHistory(searchText);
       closeModal();
-      navigation.navigate("SearchResult", { searchText, searchType });
+      dispatch(searchActions.updateSearchType(searchType));
+      navigation.navigate("SearchResult", { searchText });
     } catch (error) {
       console.error("검색 에러:", error);
     }

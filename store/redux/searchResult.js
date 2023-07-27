@@ -15,7 +15,11 @@ export const fetchSearchResults = createAsyncThunk(
 
       let sortedResults = data.data.content;
 
-      return { sortedResults, currentPage, totalPages: data.data.totalPages };
+      return {
+        sortedResults,
+        currentPage,
+        totalPages: data.data.totalPages,
+      };
     } catch (error) {
       console.error("검색 에러:", error);
       throw error;
@@ -34,6 +38,9 @@ const searchResultSlice = createSlice({
     searchType: "상호명",
   },
   reducers: {
+    updateSearchType: (state, action) => {
+      state.searchType = action.payload;
+    },
     currentPageIncrement: (state) => {
       state.currentPage += 1;
     },
