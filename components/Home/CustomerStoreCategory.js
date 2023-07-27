@@ -8,7 +8,7 @@ import {
   Image,
 } from "react-native";
 import axios from "axios";
-import LocationText from "../components/Places/LocationText";
+import LocationText from "../Places/LocationText";
 
 const CustomerStoreCategory = () => {
   const [categoryData, setCategoryData] = useState([]);

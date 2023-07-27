@@ -19,7 +19,7 @@ function CustomerStoreRank() {
       );
 
       setNews(response.data.data);
-      setCurrentIndex(0); // fetchNews 완료 후에 currentIndex를 0으로 설정
+      setCurrentIndex(0);
     } catch (e) {
       setError(e);
     }

@@ -1,8 +1,8 @@
 import { View, Text, StyleSheet, Image, Pressable } from "react-native";
 import LocationButton from "../components/Places/LocationButton";
-import CustomerStoreRanks from "../data/CustomerStoreRank";
-import CustomerStoreSlide from "../data/CustomerStoreSlide";
-import CustomerStoreCategory from "../data/CustomerStoreCategory";
+import CustomerStoreRank from "../components/Home/CustomerStoreRank";
+import CustomerStoreSlide from "../components/Home/CustomerStoreSlide";
+import CustomerStoreCategory from "../components/Home/CustomerStoreCategory";
 
 function CustomerStartScreen() {
   return (
@@ -28,7 +28,7 @@ function CustomerStartScreen() {
       <Text style={[styles.text]}>지금까지 누적 랭킹입니다.</Text>
 
       <View style={styles.textdesign}>
-        <CustomerStoreRanks />
+        <CustomerStoreRank />
       </View>
       <Text style={styles.how}> 오늘은 어떤</Text>
       <Text style={styles.food}>음식 </Text>
