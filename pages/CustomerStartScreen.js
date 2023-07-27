@@ -67,7 +67,6 @@ const styles = StyleSheet.create({
     height: 13,
     left: 220,
     top: 91,
-    backgroundColor: "#72FFAA",
   },
 
   color: {
@@ -91,10 +90,8 @@ const styles = StyleSheet.create({
     fontWeight: 700,
     fontSize: 19,
     lineHeigh: 29,
-
     color: "#000000",
   },
-
   whitebox: {
     position: "absolute",
     width: 328,
@@ -115,9 +112,7 @@ const styles = StyleSheet.create({
     fontStyle: "normal",
     fontWeight: 500,
     fontSize: 12,
-    lineHeight: 17,
     zIndex: 4,
-
     color: "#000000",
   },
   textdesign: {
@@ -139,8 +134,6 @@ const styles = StyleSheet.create({
     top: 209,
     fontWeight: 500,
     fontSize: 20,
-    lineHeight: 29,
-
     color: "#000000",
   },
   food: {
@@ -151,7 +144,6 @@ const styles = StyleSheet.create({
     top: 206,
     fontWeight: 900,
     fontSize: 24,
-    lineHeight: 35,
     color: "#F3AC61",
   },
   want: {
@@ -170,7 +162,6 @@ const styles = StyleSheet.create({
     alignItems: "flex-start",
     padding: 0,
     gap: 15,
-
     position: "absolute",
     width: 510,
     height: 160,
@@ -183,7 +174,6 @@ const styles = StyleSheet.create({
     height: 160,
     left: 0,
     top: 0,
-
     background: "#FFB15F",
     borderRadius: 30,
   },
@@ -234,7 +224,6 @@ const styles = StyleSheet.create({
     flex: 1,
     width: "100%",
     top: 130,
-    Height: 50,
   },
   Meals: {
     position: "absolute",

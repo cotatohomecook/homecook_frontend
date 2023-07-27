@@ -47,7 +47,6 @@ const CustomerStoreCategory = () => {
       }
 
       const response = await axios.get(url);
-      console.log(response.data.data.content);
       setCategoryData(response.data.data.content);
       setShowCategoryData(true);
       setSelectedCategory(category);
@@ -181,7 +180,6 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     zIndex: 5,
     top: 10,
-    ///////
   },
   button: {
     flex: 1,
@@ -195,7 +193,6 @@ const styles = StyleSheet.create({
     height: 27,
     borderRadius: 9,
     backgroundColor: "#ffb15f",
-    left: 16,
   },
   buttonPressed: {
     backgroundColor: "#d5d5d5",
@@ -203,7 +200,6 @@ const styles = StyleSheet.create({
   buttonText: {
     width: 23,
     height: 17,
-    //fontFamily: "NotoSansKR",
     fontSize: 12,
     fontWeight: "500",
     fontStyle: "normal",
@@ -216,7 +212,6 @@ const styles = StyleSheet.create({
   },
   mapcontainer: {
     marginBottom: 10,
-    top: 20,
     flexDirection: "row",
     width: 327,
     height: 127,
@@ -236,7 +231,6 @@ const styles = StyleSheet.create({
     height: 40,
     left: 155,
     top: 16,
-    //fontFamily: "NotoSansKR",
     fontSize: 20,
     fontWeight: "bold",
     fontStyle: "normal",
@@ -257,7 +251,6 @@ const styles = StyleSheet.create({
   name: {
     width: 113,
     height: 23,
-    //fontFamily: "NotoSerifKR",
     fontSize: 16,
     fontWeight: "500",
     fontStyle: "normal",
@@ -272,7 +265,6 @@ const styles = StyleSheet.create({
     left: 28,
     width: 100,
     height: 12,
-    //fontFamily: "NotoSerifKR",
     fontSize: 10,
     fontWeight: "500",
     fontStyle: "normal",
@@ -288,7 +280,6 @@ const styles = StyleSheet.create({
     left: 28,
     width: 76,
     height: 17,
-    //fontFamily: "NotoSansKR",
     fontSize: 12,
     fontWeight: "normal",
     fontStyle: "normal",
@@ -301,15 +292,14 @@ const styles = StyleSheet.create({
     left: 17,
   },
   scroll: {
-    top: 13,
     left: 11,
-    height: "100%",
+    top: 10,
   },
   imagehome: {
     top: 6,
     left: 200,
   },
   scrollContent: {
-    paddingBottom: 300, // 필요한 경우 아래쪽 패딩을 추가하여 맨 마지막 아이템이 가려지지 않도록 함
+    paddingBottom: 400, // 필요한 경우 아래쪽 패딩을 추가하여 맨 마지막 아이템이 가려지지 않도록 함
   },
 });
