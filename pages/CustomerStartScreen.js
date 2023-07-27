@@ -1,34 +1,10 @@
 import { View, Text, StyleSheet, Image, Pressable } from "react-native";
 import LocationButton from "../components/Places/LocationButton";
-
 import CustomerStoreRanks from "../data/CustomerStoreRank";
 import CustomerStoreSlide from "../data/CustomerStoreSlide";
 import CustomerStoreCategory from "../data/CustomerStoreCategory";
 
-// 음식 슬라이드 더미 데이터 받아오는 코드
-const renderGridItem = (itemData) => {
-  return (
-    <View style={styles.gridItem}>
-      <Pressable style={styles.buttons}>
-        <Image
-          source={{ uri: itemData.item.imageUrl, width: 141, height: 90 }}
-        />
-        <Text style={styles.titles}>{itemData.item.title}</Text>
-        <Text style={styles.details}>{itemData.item.text}</Text>
-      </Pressable>
-    </View>
-  );
-};
-
-// 음식별 슬라이드 더미 데이터 받아오는 코드
-const renderButtonItem = (itemData) => {
-  return <Text style={styles.category}>{itemData.item.menu}</Text>;
-};
-
-// 카테고리 버튼
-
 function CustomerStartScreen() {
-  //화면 출력
   return (
     <>
       <View style={styles.imageContainer}>
@@ -69,7 +45,6 @@ function CustomerStartScreen() {
 }
 export default CustomerStartScreen;
 
-//스타일링
 const styles = StyleSheet.create({
   imageContainer: {
     flexDirection: "row",
@@ -112,8 +87,6 @@ const styles = StyleSheet.create({
     height: 22,
     left: 79,
     top: 88,
-
-    //fontFamily: 'Noto Sans KR';
     fontStyle: "normal",
     fontWeight: 700,
     fontSize: 19,
@@ -129,7 +102,6 @@ const styles = StyleSheet.create({
     left: 33,
     top: 147,
     backgroundColor: "#FFFFFF",
-    //box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
     borderRadius: 16,
     elevation: 7,
     zIndex: 3,
@@ -155,13 +127,8 @@ const styles = StyleSheet.create({
     left: 263,
     top: 160,
     zIndex: 5,
-
-    //font-family: 'Noto Sans KR';
-    //font-style: normal,
     fontWeight: 500,
     fontSize: 12,
-    //lineHeight: 17,
-
     color: "#000000",
   },
   how: {
@@ -170,9 +137,6 @@ const styles = StyleSheet.create({
     height: 38,
     left: 58,
     top: 209,
-
-    //font-family: 'Noto Sans KR';
-    //font-style: normal;
     fontWeight: 500,
     fontSize: 20,
     lineHeight: 29,
@@ -185,8 +149,6 @@ const styles = StyleSheet.create({
     height: 38,
     left: 170,
     top: 206,
-    //font-family: 'Noto Sans KR';
-    //font-style: normal;
     fontWeight: 900,
     fontSize: 24,
     lineHeight: 35,
@@ -198,11 +160,8 @@ const styles = StyleSheet.create({
     height: 29,
     left: 220,
     top: 210,
-    //fontFamily: 'Noto Sans KR';
-    //font-style: normal;
     fontWeight: 500,
     fontSize: 20,
-    //line-height: 29,
     color: "#000000",
   },
   slide: {
@@ -256,11 +215,8 @@ const styles = StyleSheet.create({
     height: 19,
     top: 99,
     textAlign: "center",
-    //font-family: 'Noto Serif KR';
-    //font-style: normal;
     fontWeight: 700,
     fontSize: 13,
-    //lineHeight: 19,
     color: "#FFFFFF",
   },
   details: {
@@ -269,15 +225,11 @@ const styles = StyleSheet.create({
     height: 14,
     textAlign: "center",
     top: 124,
-    //font-family: 'Noto Serif KR';
-    //font-style: normal;
     fontWeight: 500,
     fontSize: 10,
-    //line-height: 14px;
     textAlign: "center",
     color: "#FFFFFF",
   },
-
   storeslide: {
     flex: 1,
     width: "100%",
