@@ -212,7 +212,7 @@ const styles = StyleSheet.create({
     top: 6,
   },
   searchhistory: {
-    width: 52,
+    width: 200,
     height: 40,
     fontSize: 14,
     left: 40,
@@ -261,7 +261,7 @@ const styles = StyleSheet.create({
     top: 190,
   },
   deleteButton: {
-    left: 222,
+    left: 70,
   },
   resetbutton: {
     width: 66,
