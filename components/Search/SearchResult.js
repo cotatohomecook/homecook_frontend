@@ -16,7 +16,11 @@ import SortButton from "../../common/SortButton";
 import BackButton from "../../common/BackButton";
 import SearchResultList from "./SearchResultList";
 import { useDispatch } from "react-redux";
-import { fetchSearchResults } from "../../store/redux/searchResult";
+import {
+  fetchSearchResults,
+  clearSearchResults,
+} from "../../store/redux/searchResult";
+import { searchActions } from "../../store/redux/searchResult";
 
 const SearchResult = ({ route }) => {
   const { searchText, searchType } = route.params;
@@ -27,6 +31,8 @@ const SearchResult = ({ route }) => {
     (state) => state.searchResult.searchResults
   );
   const loading = useSelector((state) => state.searchResult.loading);
+  const isLastPage = useSelector((state) => state.searchResult.isLastPage);
+  const currentPage = useSelector((state) => state.searchResult.currentPage);
   const navigation = useNavigation();
 
   const handleResultPress = () => {
@@ -41,7 +47,35 @@ const SearchResult = ({ route }) => {
     navigation.goBack();
   };
 
+  const onEndReached = () => {
+    if (!isLastPage) {
+      console.log(isLastPage);
+      dispatch(
+        fetchSearchResults({
+          searchText: searchText,
+          searchType: searchType,
+          currentPage: currentPage + 1,
+          orderBy: orderBy,
+        })
+      );
+    }
+  };
+
+  const handleOrderBy = (order) => {
+    dispatch(searchActions.clearSearchResults());
+    setOrderBy(order);
+    dispatch(
+      fetchSearchResults({
+        searchText: searchText,
+        searchType: searchType,
+        currentPage: 0,
+        orderBy: order,
+      })
+    );
+  };
+
   useEffect(() => {
+    dispatch(searchActions.clearSearchResults());
     dispatch(
       fetchSearchResults({
         searchText: searchText,
@@ -50,15 +84,7 @@ const SearchResult = ({ route }) => {
         orderBy: orderBy,
       })
     );
-  }, [searchText, searchType, orderBy]);
-
-  if (loading) {
-    return (
-      <View>
-        <ActivityIndicator size="large" color="#0000ff" />
-      </View>
-    );
-  }
+  }, [searchText, searchType]);
 
   return (
     <>
@@ -73,32 +99,40 @@ const SearchResult = ({ route }) => {
         <View style={styles.buttoncontainer}>
           <SortButton
             label={"거리순"}
-            onPress={() => setOrderBy("distance")}
+            onPress={() => handleOrderBy("distance")}
             active={orderBy === "distance"}
           ></SortButton>
           <SortButton
             label={"주문수"}
-            onPress={() => setOrderBy("orderCount")}
+            onPress={() => handleOrderBy("orderCount")}
             active={orderBy === "orderCount"}
           ></SortButton>
           <SortButton
             label={"리뷰순"}
-            onPress={() => setOrderBy("reviewCount")}
+            onPress={() => handleOrderBy("reviewCount")}
             active={orderBy === "reviewCount"}
           ></SortButton>
         </View>
-        <FlatList
-          data={searchResults}
-          keyExtractor={(item) => item.shopId}
-          renderItem={({ item }) => (
-            <SearchResultList item={item} searchText={searchText} />
-          )}
-          ListEmptyComponent={() => (
-            <View style={styles.noresultContainer}>
-              <Text style={styles.noresult}>검색 결과가 없습니다.</Text>
-            </View>
-          )}
-        />
+        {loading ? (
+          <View style={styles.loading}>
+            <ActivityIndicator size="large" color="#0000ff" />
+          </View>
+        ) : (
+          <FlatList
+            data={searchResults}
+            keyExtractor={(item) => item.shopId}
+            onEndReached={onEndReached}
+            onEndReachedThreshold={0.3}
+            renderItem={({ item }) => (
+              <SearchResultList item={item} searchText={searchText} />
+            )}
+            ListEmptyComponent={() => (
+              <View style={styles.noresultContainer}>
+                <Text style={styles.noresult}>검색 결과가 없습니다.</Text>
+              </View>
+            )}
+          />
+        )}
       </View>
       <ModalComponent modalVisible={modalVisible} closeModal={closeModal} />
     </>
@@ -136,6 +170,9 @@ const styles = StyleSheet.create({
     fontWeight: "500",
     fontSize: 16,
     left: 16,
+  },
+  loading: {
+    top: 200,
   },
   noresultContainer: {
     flex: 1,

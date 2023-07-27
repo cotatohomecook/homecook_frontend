@@ -31,8 +31,18 @@ const searchResultSlice = createSlice({
     modalVisible: false,
     currentPage: 0,
     isLastPage: false,
+    searchType: "상호명",
   },
-  reducers: {},
+  reducers: {
+    currentPageIncrement: (state) => {
+      state.currentPage += 1;
+    },
+    clearSearchResults: (state) => {
+      state.searchResults = [];
+      state.currentPage = 0;
+      state.isLastPage = false;
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(fetchSearchResults.pending, (state) => {
@@ -42,8 +52,11 @@ const searchResultSlice = createSlice({
         state.loading = false;
         state.isLastPage =
           action.payload.currentPage + 1 >= action.payload.totalPages;
-        state.searchResults = action.payload.sortedResults;
-        state.currentPage = action.payload.currentPage + 1;
+        state.searchResults = [
+          ...state.searchResults,
+          ...action.payload.sortedResults,
+        ];
+        state.currentPage = action.payload.currentPage;
       })
       .addCase(fetchSearchResults.rejected, (state) => {
         state.loading = false;
