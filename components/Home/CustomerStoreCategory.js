@@ -3,9 +3,10 @@ import {
   View,
   Text,
   Pressable,
-  ScrollView,
   StyleSheet,
   Image,
+  FlatList,
+  ActivityIndicator,
 } from "react-native";
 import axios from "axios";
 import LocationText from "../Places/LocationText";
@@ -16,8 +17,9 @@ const CustomerStoreCategory = () => {
   const [isButtonDisabled, setIsButtonDisabled] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState(null); // 선택된 카테고리
   const [initialLoad, setInitialLoad] = useState(false); // 초기 로드 여부
-
-  const pageSize = 10;
+  const [currentPage, setCurrentPage] = useState(0);
+  const [totalPages, setTotalPages] = useState(0);
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleButtonPress = async (category) => {
     if (isButtonDisabled) return;
@@ -25,10 +27,12 @@ const CustomerStoreCategory = () => {
     setIsButtonDisabled(true);
 
     try {
-      let BACKEND_URL =
-        "http://3.38.33.21:8080/api/shops/list?latitude=37.602643&longitude=126.924805&page=0&size=" +
-        pageSize;
+      let BACKEND_URL = `http://3.38.33.21:8080/api/shops/list?latitude=37.602643&longitude=126.924805&page=${currentPage}&size=5`;
       let url = "";
+
+      if (category !== selectedCategory) {
+        setCurrentPage(0);
+      }
 
       switch (category) {
         case "korean":
@@ -45,9 +49,16 @@ const CustomerStoreCategory = () => {
           url = BACKEND_URL + "&category=통합";
           break;
       }
-
+      setIsLoading(true);
       const response = await axios.get(url);
-      setCategoryData(response.data.data.content);
+      const newData = response.data.data.content;
+      const filteredNewData = newData.filter((item) => {
+        return !categoryData.some(
+          (existingItem) => existingItem.shopId === item.shopId
+        );
+      });
+      setCategoryData((prevData) => [...prevData, ...filteredNewData]);
+      setTotalPages(response.data.data.totalPages);
       setShowCategoryData(true);
       setSelectedCategory(category);
     } catch (error) {
@@ -55,16 +66,52 @@ const CustomerStoreCategory = () => {
     } finally {
       setTimeout(() => {
         setIsButtonDisabled(false);
+        setIsLoading(false);
       }, 100);
     }
   };
 
   useEffect(() => {
-    if (!initialLoad) {
-      handleButtonPress("all"); // 초기 로드 시 디폴트로 '통합' 버튼 클릭
-      setInitialLoad(true);
+    handleButtonPress("all"); // 초기 로드 시 디폴트로 '통합' 버튼 클릭
+    setInitialLoad(true);
+  }, []);
+
+  const renderItem = ({ item }) => (
+    <View style={styles.mapcontainer} key={item.shopId}>
+      <Image
+        style={styles.imagecontainer}
+        source={{
+          uri: "https://velog.velcdn.com/images/kkaerrung/post/f2d4402d-d080-4f7b-abc7-a595fe44f2f5/image.png",
+          width: 100,
+          height: 100,
+        }}
+      />
+      <View style={styles.rowcontainer}>
+        <Text style={styles.name}>{item.shopName}</Text>
+        <Text style={styles.bestmenu}>{item.bestMenuName} </Text>
+        <Text style={styles.price}>{item.bestMenuPrice}원</Text>
+        <Image
+          style={styles.imagehome}
+          source={{
+            uri: "https://velog.velcdn.com/images/kkaerrung/post/92931914-3138-4031-aeab-c3aafd8772ee/image.png",
+            width: 11,
+            height: 13,
+            top: 57,
+            left: 305,
+          }}
+        />
+      </View>
+    </View>
+  );
+
+  const onEndReached = () => {
+    if (currentPage <= totalPages - 1) {
+      setCurrentPage(currentPage + 1);
+      handleButtonPress(selectedCategory);
     }
-  }, [initialLoad]);
+  };
+
+  console.log(currentPage);
 
   return (
     <View>
@@ -132,41 +179,25 @@ const CustomerStoreCategory = () => {
             <LocationText />
           </Text>
         </View>
-
         <Text style={styles.text}>의 집밥 랭킹</Text>
         {showCategoryData && (
-          <ScrollView
-            style={styles.scroll}
-            contentContainerStyle={styles.scrollContent}
-          >
-            {categoryData.map((item) => (
-              <View style={styles.mapcontainer} key={item.shopId}>
-                <Image
-                  style={styles.imagecontainer}
-                  source={{
-                    uri: "https://velog.velcdn.com/images/kkaerrung/post/f2d4402d-d080-4f7b-abc7-a595fe44f2f5/image.png",
-                    width: 100,
-                    height: 100,
-                  }}
-                />
-                <View style={styles.rowcontainer}>
-                  <Text style={styles.name}>{item.shopName}</Text>
-                  <Text style={styles.bestmenu}>{item.bestMenuName} </Text>
-                  <Text style={styles.price}>{item.bestMenuPrice}원</Text>
-                  <Image
-                    style={styles.imagehome}
-                    source={{
-                      uri: "https://velog.velcdn.com/images/kkaerrung/post/92931914-3138-4031-aeab-c3aafd8772ee/image.png",
-                      width: 11,
-                      height: 13,
-                      top: 57,
-                      left: 305,
-                    }}
-                  />
-                </View>
+          <View>
+            {isLoading && (
+              <View style={styles.loadingContainer}>
+                <ActivityIndicator size="large" color="#0000ff" />
               </View>
-            ))}
-          </ScrollView>
+            )}
+            <FlatList
+              style={styles.scroll}
+              contentContainerStyle={styles.scrollContent}
+              data={categoryData}
+              onEndReached={onEndReached}
+              onEndReachedThreshold={0.3}
+              render
+              renderItem={renderItem}
+              keyExtractor={(item) => item.shopId}
+            />
+          </View>
         )}
       </View>
     </View>
