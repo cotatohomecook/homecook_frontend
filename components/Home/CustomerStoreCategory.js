@@ -8,73 +8,62 @@ import {
   FlatList,
   ActivityIndicator,
 } from "react-native";
-import axios from "axios";
 import LocationText from "../Places/LocationText";
+import { useDispatch } from "react-redux";
+import {
+  fetchCategoryData,
+  setInitialLoad,
+  setCurrentPage,
+  setIsButtonDisabled,
+  setSelectedCategory,
+} from "../../store/redux/customerHome";
+import { useSelector } from "react-redux";
 
 const CustomerStoreCategory = () => {
-  const [categoryData, setCategoryData] = useState([]);
-  const [showCategoryData, setShowCategoryData] = useState(false);
-  const [isButtonDisabled, setIsButtonDisabled] = useState(false);
-  const [selectedCategory, setSelectedCategory] = useState(null); // 선택된 카테고리
-  const [initialLoad, setInitialLoad] = useState(false); // 초기 로드 여부
-  const [currentPage, setCurrentPage] = useState(0);
-  const [totalPages, setTotalPages] = useState(0);
-  const [isLoading, setIsLoading] = useState(false);
+  const dispatch = useDispatch();
+  const categoryData = useSelector((state) => state.customerHome.data);
+  const showCategoryData = useSelector(
+    (state) => state.customerHome.showCategoryData
+  );
+  const isButtonDisabled = useSelector(
+    (state) => state.customerHome.isButtonDisabled
+  );
+  const selectedCategory = useSelector(
+    (state) => state.customerHome.selectedCategory
+  );
+  const initialLoad = useSelector((state) => state.customerHome.initialLoad);
+  const currentPage = useSelector((state) => state.customerHome.currentPage);
+  const totalPages = useSelector((state) => state.customerHome.totalPages);
+  const isLoading = useSelector((state) => state.customerHome.isLoading);
+  const allData = useSelector((state) => state.customerHome.allData);
 
   const handleButtonPress = async (category) => {
+    console.log(isButtonDisabled);
     if (isButtonDisabled) return;
 
-    setIsButtonDisabled(true);
+    dispatch(setIsButtonDisabled(true));
 
     try {
-      let BACKEND_URL = `http://3.38.33.21:8080/api/shops/list?latitude=37.602643&longitude=126.924805&page=${currentPage}&size=5`;
-      let url = "";
-
-      if (category !== selectedCategory) {
-        setCurrentPage(0);
-      }
-
-      switch (category) {
-        case "korean":
-          url = BACKEND_URL + "&category=한식";
-          break;
-        case "chinese":
-          url = BACKEND_URL + "&category=중식";
-          break;
-        case "western":
-          url = BACKEND_URL + "&category=양식";
-          break;
-        case "all":
-        default:
-          url = BACKEND_URL + "&category=통합";
-          break;
-      }
-      setIsLoading(true);
-      const response = await axios.get(url);
-      const newData = response.data.data.content;
-      const filteredNewData = newData.filter((item) => {
-        return !categoryData.some(
-          (existingItem) => existingItem.shopId === item.shopId
-        );
-      });
-      setCategoryData((prevData) => [...prevData, ...filteredNewData]);
-      setTotalPages(response.data.data.totalPages);
-      setShowCategoryData(true);
-      setSelectedCategory(category);
+      dispatch(setSelectedCategory(category));
+      dispatch(fetchCategoryData({ category, currentPage }));
     } catch (error) {
       console.error(error);
     } finally {
       setTimeout(() => {
-        setIsButtonDisabled(false);
-        setIsLoading(false);
+        dispatch(setIsButtonDisabled(false));
       }, 100);
     }
   };
 
+  console.log(categoryData);
+
   useEffect(() => {
-    handleButtonPress("all"); // 초기 로드 시 디폴트로 '통합' 버튼 클릭
-    setInitialLoad(true);
-  }, []);
+    if (!initialLoad) {
+      dispatch(setInitialLoad());
+      dispatch(fetchCategoryData("all", currentPage));
+      dispatch(setSelectedCategory("all"));
+    }
+  }, [dispatch, initialLoad]);
 
   const renderItem = ({ item }) => (
     <View style={styles.mapcontainer} key={item.shopId}>
@@ -106,7 +95,7 @@ const CustomerStoreCategory = () => {
 
   const onEndReached = () => {
     if (currentPage <= totalPages - 1) {
-      setCurrentPage(currentPage + 1);
+      dispatch(setCurrentPage(currentPage + 1));
       handleButtonPress(selectedCategory);
     }
   };
@@ -190,7 +179,7 @@ const CustomerStoreCategory = () => {
             <FlatList
               style={styles.scroll}
               contentContainerStyle={styles.scrollContent}
-              data={categoryData}
+              data={allData}
               onEndReached={onEndReached}
               onEndReachedThreshold={0.3}
               render
