@@ -40,9 +40,7 @@ const CustomerStoreCategory = () => {
   const handleButtonPress = async (category) => {
     console.log(isButtonDisabled);
     if (isButtonDisabled) return;
-
     dispatch(setIsButtonDisabled(true));
-
     try {
       dispatch(setSelectedCategory(category));
       dispatch(fetchCategoryData({ category, currentPage }));
@@ -54,8 +52,6 @@ const CustomerStoreCategory = () => {
       }, 100);
     }
   };
-
-  console.log(categoryData);
 
   useEffect(() => {
     if (!initialLoad) {
@@ -172,7 +168,7 @@ const CustomerStoreCategory = () => {
         {showCategoryData && (
           <View>
             {isLoading && (
-              <View style={styles.loadingContainer}>
+              <View style={{ marginTop: 10 }}>
                 <ActivityIndicator size="large" color="#0000ff" />
               </View>
             )}
@@ -320,6 +316,6 @@ const styles = StyleSheet.create({
     left: 200,
   },
   scrollContent: {
-    paddingBottom: 400, // 필요한 경우 아래쪽 패딩을 추가하여 맨 마지막 아이템이 가려지지 않도록 함
+    paddingBottom: 450, // 필요한 경우 아래쪽 패딩을 추가하여 맨 마지막 아이템이 가려지지 않도록 함
   },
 });

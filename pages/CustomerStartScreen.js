@@ -68,7 +68,6 @@ const styles = StyleSheet.create({
     left: 220,
     top: 91,
   },
-
   color: {
     position: "absolute",
     width: 13,
@@ -89,7 +88,6 @@ const styles = StyleSheet.create({
     fontStyle: "normal",
     fontWeight: 700,
     fontSize: 19,
-    lineHeigh: 29,
     color: "#000000",
   },
   whitebox: {
