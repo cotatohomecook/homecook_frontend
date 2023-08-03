@@ -38,18 +38,16 @@ const CustomerStoreCategory = () => {
   const allData = useSelector((state) => state.customerHome.allData);
 
   const handleButtonPress = async (category) => {
-    console.log(isButtonDisabled);
     if (isButtonDisabled) return;
-    dispatch(setIsButtonDisabled(true));
+
     try {
+      dispatch(setIsButtonDisabled(true));
       dispatch(setSelectedCategory(category));
       dispatch(fetchCategoryData({ category, currentPage }));
     } catch (error) {
       console.error(error);
     } finally {
-      setTimeout(() => {
-        dispatch(setIsButtonDisabled(false));
-      }, 100);
+      dispatch(setIsButtonDisabled(false));
     }
   };
 
