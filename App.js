@@ -7,7 +7,10 @@ import CustomerMap from "./pages/CustomerMap";
 import SearchScreen from "./navigator/BottomTab/SearchScreen";
 import { Provider } from "react-redux";
 import store from "./store/redux/store";
-
+import ReviewScreen from "./pages/ReviewScreen";
+import WriteReviewScreen from "./pages/WriteReviewScreen";
+import EditCustomerProfile from "./pages/EditCustomerProfile";
+ 
 const Stack = createNativeStackNavigator();
 
 export default function App() {
@@ -34,6 +37,22 @@ export default function App() {
             <Stack.Screen
               name="SearchScreen"
               component={SearchScreen}
+              options={{ headerShown: false }}
+            />
+            {/*<Stack.Screen name="ReviewScreen" component={ReviewScreen} />*/}
+            <Stack.Screen
+              name="ReviewScreen"
+              component={ReviewScreen}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="WriteReviewScreen"
+              component={WriteReviewScreen}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="EditCustomerProfile"
+              component={EditCustomerProfile}
               options={{ headerShown: false }}
             />
           </Stack.Navigator>
