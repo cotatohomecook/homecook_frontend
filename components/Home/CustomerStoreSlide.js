@@ -80,10 +80,9 @@ export default CustomerStoreSlide;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: "center",
+    flexDirection: "row",
     justifyContent: "center",
     top: 130,
-    left: 50,
   },
   square: {
     width: 160,
@@ -107,9 +106,9 @@ const styles = StyleSheet.create({
   },
   label2: {
     position: "absolute",
-    width: 39,
+    width: 100,
     height: 14,
-    left: 50,
+    left: 20,
     top: 99,
     fontWeight: "500",
     fontSize: 10,
