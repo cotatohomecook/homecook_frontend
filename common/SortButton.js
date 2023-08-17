@@ -5,7 +5,7 @@ const Button = ({ label, onPress, active }) => {
   const buttonStyle = active
     ? [styles.button, styles.activeButton]
     : styles.button;
-  const textStyle = active
+  const textStyle = !active
     ? [styles.buttonText, styles.activeButtonText]
     : styles.buttonText;
 
@@ -36,7 +36,7 @@ const styles = StyleSheet.create({
     fontWeight: "500",
     fontSize: 12,
     textAlign: "center",
-    color: "#FF8833",
+    color: "#FFFFFF",
   },
   activeButtonText: {
     color: "#FFFFFF",

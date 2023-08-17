@@ -1,21 +1,28 @@
 import React from "react";
 import { View, TouchableOpacity, Text, StyleSheet, Image } from "react-native";
+import { useNavigation } from "@react-navigation/native";
 
-const BookmarkListButton = ({ key, shopName, imageUrl }) => {
+const BookmarkListButton = ({ shopId, shopName, imageUrl }) => {
+  const navigation = useNavigation();
+
+  const GoToShopScreen = () => {
+    navigation.navigate("ShopScreen", { shopId: shopId });
+  };
+
   return (
-    <View key={key} style={styles.borderBox}>
-      <TouchableOpacity>
+    <TouchableOpacity onPress={GoToShopScreen}>
+      <View style={styles.borderBox}>
         <Text style={styles.shopName}>{shopName}</Text>
         <Image source={{ uri: imageUrl }} style={styles.image} />
-      </TouchableOpacity>
-    </View>
+      </View>
+    </TouchableOpacity>
   );
 };
 
 const styles = StyleSheet.create({
   borderBox: {
-    width: 327,
-    height: 127,
+    width: 302,
+    height: 142,
     top: 9,
     background: "#FFFFFF",
     borderRadius: 10,

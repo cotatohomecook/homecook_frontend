@@ -9,6 +9,9 @@ import MypageScreen from "./BottomTab/MypageScreen";
 import SearchResult from "../components/Search/SearchResult";
 import AddBookmarkScreen from "../pages/AddBookmarkScreen";
 import ModalComponent from "../common/ModalComponent";
+import ShopScreen from "../pages/ShopScreen";
+import MenuDetailScreen from "../pages/MenuDetailScreen";
+import OrderMenuScreen from "../pages/OrderMenuScreen";
 import store from "../store/redux/store";
 import { Provider } from "react-redux";
 import Delivery from "../pages/Delivery";
@@ -160,17 +163,6 @@ export default function BottomTabNavigator() {
             component={SearchResult}
             options={{
               headerShown: false,
-              tabBarIcon: ({ focused }) => (
-                <Image
-                  source={{
-                    uri: "https://velog.velcdn.com/images/thgus05061/post/d4caa6f3-826b-4fb5-910f-6d34726fd7c4/image.png",
-                  }}
-                  style={{
-                    width: 19,
-                    height: 19,
-                  }}
-                />
-              ),
               tabBarButton: () => null,
             }}
           />
@@ -179,17 +171,30 @@ export default function BottomTabNavigator() {
             component={AddBookmarkScreen}
             options={{
               headerShown: false,
-              tabBarIcon: ({ focused }) => (
-                <Image
-                  source={{
-                    uri: "https://velog.velcdn.com/images/thgus05061/post/d4caa6f3-826b-4fb5-910f-6d34726fd7c4/image.png",
-                  }}
-                  style={{
-                    width: 19,
-                    height: 19,
-                  }}
-                />
-              ),
+              tabBarButton: () => null,
+            }}
+          />
+          <Tab.Screen
+            name={"ShopScreen"}
+            component={ShopScreen}
+            options={{
+              headerShown: false,
+              tabBarButton: () => null,
+            }}
+          />
+          <Tab.Screen
+            name={"MenuDetailScreen"}
+            component={MenuDetailScreen}
+            options={{
+              headerShown: false,
+              tabBarButton: () => null,
+            }}
+          />
+          <Tab.Screen
+            name={"OrderMenuScreen"}
+            component={OrderMenuScreen}
+            options={{
+              headerShown: false,
               tabBarButton: () => null,
             }}
           />

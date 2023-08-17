@@ -3,69 +3,98 @@ import {
   View,
   Text,
   Pressable,
-  ScrollView,
   StyleSheet,
   Image,
+  FlatList,
+  ActivityIndicator,
 } from "react-native";
-import axios from "axios";
-import LocationText from "../components/Places/LocationText";
+import LocationText from "../Places/LocationText";
+import { useDispatch } from "react-redux";
+import {
+  fetchCategoryData,
+  setInitialLoad,
+  setCurrentPage,
+  setIsButtonDisabled,
+  setSelectedCategory,
+} from "../../store/redux/customerHome";
+import { useSelector } from "react-redux";
 
 const CustomerStoreCategory = () => {
-  const [categoryData, setCategoryData] = useState([]);
-  const [showCategoryData, setShowCategoryData] = useState(false);
-  const [isButtonDisabled, setIsButtonDisabled] = useState(false);
-  const [selectedCategory, setSelectedCategory] = useState(null); // 선택된 카테고리
-  const [initialLoad, setInitialLoad] = useState(false); // 초기 로드 여부
-
-  const pageSize = 10;
+  const dispatch = useDispatch();
+  const categoryData = useSelector((state) => state.customerHome.data);
+  const showCategoryData = useSelector(
+    (state) => state.customerHome.showCategoryData
+  );
+  const isButtonDisabled = useSelector(
+    (state) => state.customerHome.isButtonDisabled
+  );
+  const selectedCategory = useSelector(
+    (state) => state.customerHome.selectedCategory
+  );
+  const initialLoad = useSelector((state) => state.customerHome.initialLoad);
+  const currentPage = useSelector((state) => state.customerHome.currentPage);
+  const totalPages = useSelector((state) => state.customerHome.totalPages);
+  const isLoading = useSelector((state) => state.customerHome.isLoading);
+  const allData = useSelector((state) => state.customerHome.allData);
 
   const handleButtonPress = async (category) => {
     if (isButtonDisabled) return;
 
-    setIsButtonDisabled(true);
-
     try {
-      let BACKEND_URL =
-        "http://3.38.33.21:8080/api/shops/list?latitude=37.602643&longitude=126.924805&page=0&size=" +
-        pageSize;
-      let url = "";
-
-      switch (category) {
-        case "korean":
-          url = BACKEND_URL + "&category=한식";
-          break;
-        case "chinese":
-          url = BACKEND_URL + "&category=중식";
-          break;
-        case "western":
-          url = BACKEND_URL + "&category=양식";
-          break;
-        case "all":
-        default:
-          url = BACKEND_URL + "&category=통합";
-          break;
-      }
-
-      const response = await axios.get(url);
-      console.log(response.data.data.content);
-      setCategoryData(response.data.data.content);
-      setShowCategoryData(true);
-      setSelectedCategory(category);
+      dispatch(setIsButtonDisabled(true));
+      dispatch(setSelectedCategory(category));
+      dispatch(fetchCategoryData({ category, currentPage }));
     } catch (error) {
       console.error(error);
     } finally {
-      setTimeout(() => {
-        setIsButtonDisabled(false);
-      }, 100);
+      dispatch(setIsButtonDisabled(false));
     }
   };
 
   useEffect(() => {
     if (!initialLoad) {
-      handleButtonPress("all"); // 초기 로드 시 디폴트로 '통합' 버튼 클릭
-      setInitialLoad(true);
+      dispatch(setInitialLoad());
+      dispatch(fetchCategoryData("all", currentPage));
+      dispatch(setSelectedCategory("all"));
     }
-  }, [initialLoad]);
+  }, [dispatch, initialLoad]);
+
+  const renderItem = ({ item }) => (
+    <View style={styles.mapcontainer} key={item.shopId}>
+      <Image
+        style={styles.imagecontainer}
+        source={{
+          uri: "https://velog.velcdn.com/images/kkaerrung/post/f2d4402d-d080-4f7b-abc7-a595fe44f2f5/image.png",
+          width: 100,
+          height: 100,
+        }}
+      />
+      <View style={styles.rowcontainer}>
+        <Text style={styles.name}>{item.shopName}</Text>
+        <Text style={styles.bestmenu}>{item.bestMenuName} </Text>
+        <Text style={styles.price}>{item.bestMenuPrice}원</Text>
+        <Image
+          style={styles.imagehome}
+          source={{
+            uri: "https://velog.velcdn.com/images/kkaerrung/post/92931914-3138-4031-aeab-c3aafd8772ee/image.png",
+            width: 11,
+            height: 13,
+            top: 57,
+            left: 305,
+          }}
+        />
+      </View>
+    </View>
+  );
+
+  const onEndReached = () => {
+    if (currentPage <= totalPages - 1) {
+      dispatch(setCurrentPage(currentPage + 1));
+      handleButtonPress(selectedCategory);
+    }
+  };
+
+  console.log(currentPage);
 
   return (
     <View>
@@ -133,41 +162,25 @@ const CustomerStoreCategory = () => {
             <LocationText />
           </Text>
         </View>
-
         <Text style={styles.text}>의 집밥 랭킹</Text>
         {showCategoryData && (
-          <ScrollView
-            style={styles.scroll}
-            contentContainerStyle={styles.scrollContent}
-          >
-            {categoryData.map((item) => (
-              <View style={styles.mapcontainer} key={item.shopId}>
-                <Image
-                  style={styles.imagecontainer}
-                  source={{
-                    uri: "https://velog.velcdn.com/images/kkaerrung/post/f2d4402d-d080-4f7b-abc7-a595fe44f2f5/image.png",
-                    width: 100,
-                    height: 100,
-                  }}
-                />
-                <View style={styles.rowcontainer}>
-                  <Text style={styles.name}>{item.shopName}</Text>
-                  <Text style={styles.bestmenu}>{item.bestMenuName} </Text>
-                  <Text style={styles.price}>{item.bestMenuPrice}원</Text>
-                  <Image
-                    style={styles.imagehome}
-                    source={{
-                      uri: "https://velog.velcdn.com/images/kkaerrung/post/92931914-3138-4031-aeab-c3aafd8772ee/image.png",
-                      width: 11,
-                      height: 13,
-                      top: 57,
-                      left: 305,
-                    }}
-                  />
-                </View>
+          <View>
+            {isLoading && (
+              <View style={{ marginTop: 10 }}>
+                <ActivityIndicator size="large" color="#0000ff" />
               </View>
-            ))}
-          </ScrollView>
+            )}
+            <FlatList
+              style={styles.scroll}
+              contentContainerStyle={styles.scrollContent}
+              data={allData}
+              onEndReached={onEndReached}
+              onEndReachedThreshold={0.3}
+              render
+              renderItem={renderItem}
+              keyExtractor={(item) => item.shopId}
+            />
+          </View>
         )}
       </View>
     </View>
@@ -181,7 +194,6 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     zIndex: 5,
     top: 10,
-    ///////
   },
   button: {
     flex: 1,
@@ -195,7 +207,6 @@ const styles = StyleSheet.create({
     height: 27,
     borderRadius: 9,
     backgroundColor: "#ffb15f",
-    left: 16,
   },
   buttonPressed: {
     backgroundColor: "#d5d5d5",
@@ -203,7 +214,6 @@ const styles = StyleSheet.create({
   buttonText: {
     width: 23,
     height: 17,
-    //fontFamily: "NotoSansKR",
     fontSize: 12,
     fontWeight: "500",
     fontStyle: "normal",
@@ -216,7 +226,6 @@ const styles = StyleSheet.create({
   },
   mapcontainer: {
     marginBottom: 10,
-    top: 20,
     flexDirection: "row",
     width: 327,
     height: 127,
@@ -236,7 +245,6 @@ const styles = StyleSheet.create({
     height: 40,
     left: 155,
     top: 16,
-    //fontFamily: "NotoSansKR",
     fontSize: 20,
     fontWeight: "bold",
     fontStyle: "normal",
@@ -257,7 +265,6 @@ const styles = StyleSheet.create({
   name: {
     width: 113,
     height: 23,
-    //fontFamily: "NotoSerifKR",
     fontSize: 16,
     fontWeight: "500",
     fontStyle: "normal",
@@ -272,7 +279,6 @@ const styles = StyleSheet.create({
     left: 28,
     width: 100,
     height: 12,
-    //fontFamily: "NotoSerifKR",
     fontSize: 10,
     fontWeight: "500",
     fontStyle: "normal",
@@ -288,7 +294,6 @@ const styles = StyleSheet.create({
     left: 28,
     width: 76,
     height: 17,
-    //fontFamily: "NotoSansKR",
     fontSize: 12,
     fontWeight: "normal",
     fontStyle: "normal",
@@ -301,15 +306,14 @@ const styles = StyleSheet.create({
     left: 17,
   },
   scroll: {
-    top: 13,
     left: 11,
-    height: "100%",
+    top: 10,
   },
   imagehome: {
     top: 6,
     left: 200,
   },
   scrollContent: {
-    paddingBottom: 300, // 필요한 경우 아래쪽 패딩을 추가하여 맨 마지막 아이템이 가려지지 않도록 함
+    paddingBottom: 450, // 필요한 경우 아래쪽 패딩을 추가하여 맨 마지막 아이템이 가려지지 않도록 함
   },
 });

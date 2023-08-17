@@ -52,6 +52,7 @@ const styles = StyleSheet.create({
     padding: 10,
     elevation: 3,
     marginLeft: 12,
+    marginBottom: 10,
     flexDirection: "row",
   },
   textContainer: {

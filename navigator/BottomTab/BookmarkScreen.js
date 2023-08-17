@@ -12,8 +12,8 @@ import Header from "../../common/Header";
 import BackButton from "../../common/BackButton";
 import { useSelector, useDispatch } from "react-redux";
 import { fetchBookmarkData } from "../../store/redux/bookmark";
-import FavoriteCategoryButton from "../../common/FavoriteCategoryButton";
-import BookmarkListButton from "../../common/BookmarkListButton";
+import FavoriteCategoryButton from "../../components/Bookmark/FavoriteCategoryButton";
+import BookmarkListButton from "../../components/Bookmark/BookmarkListButton";
 
 const BookmarkScreen = () => {
   const folderNames = useSelector((state) => state.bookmark.folderNames);
@@ -22,6 +22,7 @@ const BookmarkScreen = () => {
   const [selectedFolder, setSelectedFolder] = useState(null);
   const [showCategories, setShowCategories] = useState(true);
   const [uniqueShopIds, setUniqueShopIds] = useState([]);
+  const [isChecked, setIsChecked] = useState(false);
 
   const navigation = useNavigation();
 
@@ -35,88 +36,126 @@ const BookmarkScreen = () => {
   }, [folderData]);
 
   const handleGoBack = () => {
+    setShowCategories(true);
+    setIsChecked(false);
     navigation.navigate("CustomerStartScreen");
+  };
+
+  const handleBackToFolder = () => {
+    setShowCategories(true);
   };
 
   const handleCategoryPress = (category) => {
     const selectedFolderData = folderData.filter(
       (item) => item.folderName === category
     );
-    setSelectedFolder(selectedFolderData.length > 0 ? category : null);
+    setSelectedFolder(category);
     setShowCategories(false);
   };
 
+  const handleDeleteFolder = () => {
+    setIsChecked((prevIsChecked) => !prevIsChecked);
+  };
+
+  const handleCancel = () => {
+    setIsChecked(false);
+  };
+
   return (
-    <ScrollView style={styles.container}>
-      <TouchableOpacity activeOpacity={0.8} style={styles.screen}>
+    <>
+      <View style={{ flex: 1, backgroundColor: "#FFFFFF" }}>
         <Header height={114} title={"즐겨찾기"} />
         <BackButton onPress={handleGoBack} top={-45} />
-        <Image
-          source={{
-            uri: "https://velog.velcdn.com/images/kkaerrung/post/d30e70af-cbc7-4ccf-a81e-03049d5d8ba9/image.png",
-            width: 78,
-            height: 78,
-          }}
-          style={{ marginTop: 17, marginLeft: 32 }}
-        />
-        <Text style={styles.textStyle}>
-          <Text style={styles.blueText}>'박세라'</Text>님{"\n"}
-          <Text style={styles.textSize}>즐겨찾기 내역이에요.</Text>
-        </Text>
-        {showCategories ? (
-          <View style={styles.buttonsContainer}>
-            {folderNames &&
-              folderNames.map((category) => (
-                <FavoriteCategoryButton
-                  key={category}
-                  title={category}
-                  onPress={() => handleCategoryPress(category)}
-                  style={styles.button}
-                >
-                  <Text style={styles.buttonText}>{category}</Text>
-                </FavoriteCategoryButton>
-              ))}
-          </View>
-        ) : (
-          <View style={styles.selectedFolderContainer}>
-            <View style={styles.selectedFolderBox}>
-              <Image
-                style={{ marginLeft: 90 }}
-                source={{
-                  uri: "https://velog.velcdn.com/images/kkaerrung/post/bd4f2268-be39-406a-90d8-6b8e94da9c7d/image.png",
-                  width: 22,
-                  height: 20,
-                }}
-              ></Image>
-              <Text style={styles.selectedFolderText}>{selectedFolder}</Text>
+        <ScrollView style={styles.container}>
+          <Image
+            source={{
+              uri: "https://velog.velcdn.com/images/kkaerrung/post/d30e70af-cbc7-4ccf-a81e-03049d5d8ba9/image.png",
+              width: 78,
+              height: 78,
+            }}
+            style={{ marginTop: 17, marginLeft: 32 }}
+          />
+          <Text style={styles.textStyle}>
+            <Text style={styles.blueText}>'박세라'</Text>님{"\n"}
+            <Text style={styles.textSize}>즐겨찾기 내역이에요.</Text>
+          </Text>
+          {showCategories ? (
+            <View style={styles.buttonsContainer}>
+              {folderNames &&
+                folderNames.map((category) => (
+                  <FavoriteCategoryButton
+                    key={category}
+                    title={category}
+                    onPress={() => handleCategoryPress(category)}
+                    style={styles.button}
+                    isChecked={isChecked}
+                    handleCancel={handleCancel}
+                  >
+                    <Text style={styles.buttonText}>{category}</Text>
+                  </FavoriteCategoryButton>
+                ))}
+              <TouchableOpacity onPress={handleDeleteFolder}>
+                <Image
+                  style={{ marginTop: 30 }}
+                  source={{
+                    uri: "https://velog.velcdn.com/images/kkaerrung/post/4fd871d2-01cb-49e9-b27f-d3448d4dbc23/image.png",
+                    width: 69,
+                    height: 69,
+                  }}
+                ></Image>
+              </TouchableOpacity>
             </View>
-            <TouchableOpacity onPress={handleGoBack}>
-              <Image
-                style={{ marginTop: 9 }}
-                source={{
-                  uri: "https://velog.velcdn.com/images/kkaerrung/post/8ff31b30-29cc-4a5f-a70d-2b1e340bab91/image.png",
-                  width: 19,
-                  height: 19,
-                }}
-              ></Image>
-            </TouchableOpacity>
-            {uniqueShopIds.map((shopId) => {
-              const item = folderData.find((item) => item.shopId === shopId);
-              if (item && item.folderName === selectedFolder) {
-                return (
-                  <BookmarkListButton
-                    key={item.shopId}
-                    shopName={item.shopName}
-                    imageUrl={item.imageUrl}
-                  />
-                );
-              }
-              return null;
-            })}
-          </View>
-        )}
-      </TouchableOpacity>
-    </ScrollView>
+          ) : (
+            <View style={styles.selectedFolderContainer}>
+              <View style={styles.selectedFolderBox}>
+                <Image
+                  style={{ marginLeft: 90 }}
+                  source={{
+                    uri: "https://velog.velcdn.com/images/kkaerrung/post/bd4f2268-be39-406a-90d8-6b8e94da9c7d/image.png",
+                    width: 22,
+                    height: 20,
+                  }}
+                ></Image>
+                <Text style={styles.selectedFolderText}>{selectedFolder}</Text>
+              </View>
+              <TouchableOpacity onPress={handleBackToFolder}>
+                <Image
+                  style={{ marginTop: 9 }}
+                  source={{
+                    uri: "https://velog.velcdn.com/images/kkaerrung/post/8ff31b30-29cc-4a5f-a70d-2b1e340bab91/image.png",
+                    width: 19,
+                    height: 19,
+                  }}
+                ></Image>
+              </TouchableOpacity>
+              {uniqueShopIds.map((shopId) => {
+                const item = folderData.find((item) => item.shopId === shopId);
+                if (item && item.folderName === selectedFolder) {
+                  return (
+                    <BookmarkListButton
+                      key={item.shopId}
+                      shopId={item.shopId}
+                      shopName={item.shopName}
+                      imageUrl={item.imageUrl}
+                      isChecked={isChecked}
+                    />
+                  );
+                }
+                return null;
+              })}
+            </View>
+          )}
+          <View
+            style={{
+              backgroundColor: "#FFFFFF",
+              marginLeft: 163,
+              marginTop: 35,
+              marginBottom: 50,
+            }}
+          ></View>
+        </ScrollView>
+      </View>
+    </>
   );
 };
 
@@ -124,10 +163,8 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#FFFFFF",
-  },
-  screen: {
-    flex: 1,
-    width: "100%",
+    height: "100%",
+    marginTop: -15,
   },
   textSize: {
     fontSize: 24,
