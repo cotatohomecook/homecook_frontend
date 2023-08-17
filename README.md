@@ -24,7 +24,7 @@ React Native과 Spring Boot를 통해 개발한 안드로이드 전용 홈메이
 
 ## 📌 주요 기능
 #### 로그인 (전유정)
-- 아이디, 비밀번호 정보를 requestbody로 Post 요청
+- 아이디, 비밀번호 정보를 Post 요청
 - 로그인 완료 후 사용자별 토큰을 저장 후 사용 
 
 <p align="left">
@@ -70,9 +70,7 @@ React Native과 Spring Boot를 통해 개발한 안드로이드 전용 홈메이
 ### 구매자 검색 결과 (전유정)
 - 검색 결과 무한 스크롤 구현
 - 기존 검색어에서 주문순, 리뷰순, 거리순으로 검색 필터 구현
-- 검색된 상점 라우팅 기능 구현
-- 검색된 상점별 즐겨찾기 구현
-- 주문순, 리뷰순, 거리순 검색 및 즐겨찾기 유무 API GET 요청
+- 검색 결과 별 즐겨찾기 유무 조회 가능하도록 구현
 <p align="left">
   <img src="https://github.com/cotatohomecook/homecook_frontend/assets/109844803/c575c74f-3916-417f-8997-c8aa76b84ac4" alt="image" width="200" height="400" />
 </p>
@@ -87,8 +85,8 @@ React Native과 Spring Boot를 통해 개발한 안드로이드 전용 홈메이
 
 ### 구매자 메뉴 주문 (전유정)
 - 메뉴 주문을 장바구니에 추가하는 기능 
-- 가게 정보, 메뉴 정보, 수량, 가격, 이미지 정보를 request body 파라미터로 POST 요청
-- 입력된 주소를 LocalStorage에 검색 기록 저장
+- 가게 정보, 메뉴 정보, 수량, 가격, 이미지 정보를 POST 요청
+- 입력된 주소지를 사용자 기기에 저장하여, 다음에 사용할 수 있도록 구현
 
 <p align="left">
   <img src="https://github.com/cotatohomecook/homecook_frontend/assets/109844803/01b3416f-8ef6-49f7-8c58-dce44d76e6bf" alt="image" width="600" height="400" />
