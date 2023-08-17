@@ -1,4 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import axios from "axios";
 
 export const fetchSearchResults = createAsyncThunk(
   "searchResults/fetchSearchResults",
@@ -10,8 +11,8 @@ export const fetchSearchResults = createAsyncThunk(
           ? `http://3.38.33.21:8080/api/shops/search?latitude=37.60264&longitude=126.924805&shopName=${searchText}&page=${currentPage}&size=6&orderBy=${orderBy}`
           : `http://3.38.33.21:8080/api/shops/search?latitude=37.602643&longitude=126.924805&menuName=${searchText}&page=${currentPage}&size=6&orderBy=${orderBy}`;
 
-      const response = await fetch(url);
-      const data = await response.json();
+      const response = await axios.get(url);
+      const data = response.data;
 
       let sortedResults = data.data.content;
 
