@@ -24,15 +24,18 @@ React Native과 Spring Boot를 통해 개발한 안드로이드 전용 홈메이
 
 ## 📌 주요 기능
 #### 로그인 (전유정)
-- 아이디, 비밀번호 정보를 Post 요청
-- 로그인 완료 후 사용자별 토큰을 저장 후 사용 
+- 회원 가입된 유저의 경우, 로그인 후 메인 페이지로 이동합니다. 
+- 아이디, 비밀번호 정보를 입력 받은 후 서버에 Post 요청
+- 로그인 완료 후 받은 사용자의 토큰을 저장
+
 
 <p align="left">
   <img src="https://github.com/cotatohomecook/homecook_frontend/assets/109844803/b529f93b-6e0b-426b-9b83-77e4ce502a65" alt="image" width="200" height="400" />
 </p>
 
 #### 회원가입 (전유정)
-- 회원 가입 정보를 requestbody로 POST 요청
+- 중복된 회원 가입 정보가 없는 경우, 회원가입이 완료된 후 로그인 페이지로 이동합니다.
+- 회원 가입 정보를 입력받은 후 서버에 POST 요청
 
 <p align="left">
   <img src="https://github.com/cotatohomecook/homecook_frontend/assets/109844803/5b6c1c36-a67b-4d03-ae8f-e67c131b22f8" alt="image" width="200" height="400" />
