@@ -3,6 +3,7 @@ import bookmarkReducer from "./bookmark";
 import shopInfoReducer from "./shopInfo";
 import searchResultReducer from "./searchResult";
 import customerHomeReducer from "./customerHome";
+import authReducer from "./Auth";
 
 const store = configureStore({
   reducer: {
@@ -10,6 +11,7 @@ const store = configureStore({
     shopInfo: shopInfoReducer,
     searchResult: searchResultReducer,
     customerHome: customerHomeReducer,
+    auth: authReducer,
   },
 });
 
