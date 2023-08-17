@@ -38,6 +38,7 @@ function MyPage() {
 
   const confirmSellerChange = () => {
     // 판매자로 변경
+    navigation.navigate('StoreRegistrationScreen');
     closeSellerModal();
   };
 
@@ -202,7 +203,6 @@ const styles = StyleSheet.create({
   text: {
     color: '#000',
     textAlign: 'center',
-    //fontFamily: 'Noto Sans KR',
     fontSize: 18,
     fontStyle: 'normal',
     fontWeight: '700',
@@ -236,7 +236,6 @@ const styles = StyleSheet.create({
   customerText:{
       color: '#D0812E',
       textAlign: 'center',
-      //fontFamily: 'Noto Sans KR', 
       fontSize: 14,
       fontStyle: 'normal',
       fontWeight: '700',
@@ -246,7 +245,6 @@ const styles = StyleSheet.create({
   sellerText:{
     color: '#918B6F',
       textAlign: 'center',
-      //fontFamily: 'Noto Sans KR', 
       fontSize: 14,
       fontStyle: 'normal',
       fontWeight: '700',
@@ -290,7 +288,6 @@ const styles = StyleSheet.create({
   modalText2: {
     color: '#000',
     textAlign: 'center',
-    //fontFamily: 'Noto Sans KR',
     fontSize: 13,
     fontStyle: 'normal',
     fontWeight: '600',
@@ -324,7 +321,6 @@ const styles = StyleSheet.create({
   modalButtonText: {
     color: '#000',
     textAlign: 'center',
-    //fontFamily: 'Noto Sans KR',
     fontSize: 13,
     fontStyle: 'normal',
     fontWeight: '600',
@@ -338,7 +334,7 @@ const styles = StyleSheet.create({
   },
   logoutText: {
     color: '#000',
-    //fontFamily: 'Noto Sans KR',
+
     textAlign: 'center',
     fontSize: 18,
     fontStyle: 'normal',
