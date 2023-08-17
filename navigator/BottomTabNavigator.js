@@ -14,7 +14,7 @@ import MenuDetailScreen from "../pages/MenuDetailScreen";
 import OrderMenuScreen from "../pages/OrderMenuScreen";
 import store from "../store/redux/store";
 import { Provider } from "react-redux";
-
+import Delivery from "../pages/Delivery";
 const Tab = createBottomTabNavigator();
 
 export default function BottomTabNavigator() {
@@ -198,6 +198,26 @@ export default function BottomTabNavigator() {
               tabBarButton: () => null,
             }}
           />
+           <Tab.Screen
+            name={"Delivery"}
+            component={Delivery}
+            options={{
+              headerShown: false,
+              tabBarIcon: ({ focused }) => (
+                <Image
+                  source={{
+                    uri: "https://velog.velcdn.com/images/thgus05061/post/d4caa6f3-826b-4fb5-910f-6d34726fd7c4/image.png",
+                  }}
+                  style={{
+                    width: 19,
+                    height: 19,
+                  }}
+                />
+              ),
+              tabBarButton: () => null,
+            }}
+          />
+
         </Tab.Navigator>
 
         <ModalComponent
