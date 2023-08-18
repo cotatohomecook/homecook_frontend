@@ -10,6 +10,10 @@ import OrderMenuScreen from "./pages/OrderMenuScreen";
 import PaymentScreen from "./pages/PaymentScreen";
 import { Provider } from "react-redux";
 import store from "./store/redux/store";
+import WriteReviewScreen from "./pages/WriteReviewScreen";
+import EditCustomerProfile from "./pages/EditCustomerProfile";
+import SignUpScreen from "./pages/Auth/SignInScreen";
+import LoginScreen from "./pages/Auth/LoginScreen";
 
 const Stack = createNativeStackNavigator();
 
@@ -20,6 +24,20 @@ export default function App() {
       <Provider store={store}>
         <NavigationContainer>
           <Stack.Navigator>
+            <Stack.Screen
+              name="LoginScreen"
+              component={LoginScreen}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="SignUpScreen"
+              component={SignUpScreen}
+              options={{
+                headerTitle: "계정 만들기",
+                headerHeight: 20,
+                headerTitleStyle: { fontWeight: "bold" },
+              }}
+            />
             <Stack.Screen
               name="CustomerStartScreen"
               component={BottomTabNavigator}
@@ -37,6 +55,16 @@ export default function App() {
             <Stack.Screen
               name="SearchScreen"
               component={SearchScreen}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="WriteReviewScreen"
+              component={WriteReviewScreen}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="EditCustomerProfile"
+              component={EditCustomerProfile}
               options={{ headerShown: false }}
             />
             <Stack.Screen

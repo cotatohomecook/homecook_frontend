@@ -14,7 +14,6 @@ import MenuDetailScreen from "../pages/MenuDetailScreen";
 import OrderMenuScreen from "../pages/OrderMenuScreen";
 import store from "../store/redux/store";
 import { Provider } from "react-redux";
-
 const Tab = createBottomTabNavigator();
 
 export default function BottomTabNavigator() {
@@ -198,6 +197,8 @@ export default function BottomTabNavigator() {
               tabBarButton: () => null,
             }}
           />
+          
+
         </Tab.Navigator>
 
         <ModalComponent
