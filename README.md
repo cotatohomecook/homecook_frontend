@@ -18,8 +18,12 @@ React Native과 Spring Boot를 통해 개발한 안드로이드 전용 홈메이
  - 프론트엔드 (전유정, 박소현)
  - 백엔드 (김민욱, 조용헌)
    
-### ⚙️ 개발 환경
-- `React Native @0.71.4`
+## 📣 기술 스택
+### Development
+<img src="https://img.shields.io/badge/-React Native-61DAFB?logo=react&logoColor=white&style=for-the-badge"> 
+
+### Tool
+<img src="https://img.shields.io/badge/visual studio code-007ACC?style=for-the-badge&logo=visualstudiocode&logoColor=white"> <img src="https://img.shields.io/badge/github-181717?style=for-the-badge&logo=github&logoColor=white">
 
 
 ## 📌 주요 기능
